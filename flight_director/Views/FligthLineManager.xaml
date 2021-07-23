@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:model="clr-namespace:flight_director.Models" 
+             xmlns:viewmodels="clr-namespace:flight_director.ViewModels" 
+             x:DataType="viewmodels:LineManagerViewModel"
+             x:Class="flight_director.Views.FligthLineManager"
+             BackgroundColor="Black"
+             Title="Flight Line Manager"
+             x:Name="LineManager">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Add"
+            Command="{Binding AddFligthLine}">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ListView
+            CachingStrategy="RecycleElement"
+            BackgroundColor="Transparent"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding RefreshLine}"
+            ItemsSource="{Binding FlightLine}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            SelectionMode="None"
+            SeparatorColor="White"
+            RowHeight="80">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:FlightLine">
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete"
+                                      IsDestructive="True"
+                                      CommandParameter="{Binding .}"
+                                      Command="{Binding Source={x:Reference LineManager},Path=BindingContext.RemoveFlightLine}"
+                                      />
+                        </ViewCell.ContextActions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label VerticalOptions="Center"
+                                   Text="{Binding ID}"
+                                   Grid.RowSpan="2"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding StartLat}"
+                                   Grid.Column="1"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
+                            <Label Text="{Binding StartLon}"
+                                   Grid.Column="1"
+                                   Grid.Row="1"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
+                            <Label Text="{Binding EndLat}"
+                                   Grid.Column="2"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
+                            <Label Text="{Binding EndLon}"
+                                   Grid.Column="2"
+                                   Grid.Row="1"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
+                        </Grid>
+                    </ViewCell>
+                    
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>
+        </ListView>
+        
+    </ContentPage.Content>
+</ContentPage>

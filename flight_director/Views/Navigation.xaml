@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local ="clr-namespace:flight_director" 
+             xmlns:viewmodels="clr-namespace:flight_director.ViewModels"
+             x:Class="flight_director.Views.Navigation"
+             x:DataType="viewmodels:NavigationViewModel"
+            BackgroundColor="Black"
+            Title="Navigation">
+        <ContentPage.BindingContext>
+             <viewmodels:NavigationViewModel/>
+        </ContentPage.BindingContext>
+    <ContentPage.Content>
+
+            <Grid Margin="5,5,5,5">
+                <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="7*"/>
+                    <RowDefinition />
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+            </Grid.ColumnDefinitions>
+                <Label 
+                   Text="{Binding HeadingDisp}"
+                   Grid.ColumnSpan="4"
+                   TextColor="White"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="CenterAndExpand"
+                 />
+
+                <Image 
+                   Source="Compass_card.png"
+                   x:Name="Compass"
+                   Grid.ColumnSpan="4" 
+                    Grid.Row="1"
+                   Rotation="{Binding HeadingComp}"
+                     
+                />
+
+                <Image
+                    Source="course_indicator.png"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4"
+                    Rotation="{Binding Course}"
+                 />
+                
+                <Image
+                    Source="deviation_bar.png"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4"
+                    TranslationX="{Binding TransX}"
+                    TranslationY="{Binding TransY}"
+                    Rotation="{Binding Course}"
+
+                 />
+
+
+                <Image 
+                   Source="simulated_plane.png"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="4"
+                   Scale=" 1.05"
+                 />
+
+                <Label 
+                   Text="{Binding Status}"
+                   Grid.Row="2"
+                   Grid.Column="2"
+                   Grid.ColumnSpan="2"
+                   FontSize="Large"
+                   TextColor="{Binding StatusColor}"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalTextAlignment="Center"
+                   BackgroundColor="{Binding ButtonColor}"
+                 />
+
+
+
+                <Button 
+                    Command="{Binding Flyto}"
+                    IsEnabled="{Binding EnableFlyTo}"
+                    Text="Fly To"
+                    Grid.Row="3"
+                    Grid.Column="3"
+                 />
+
+                <Button 
+                    Text="Abort"
+                    Grid.Row="4"
+                    Grid.Column="3"
+                    BackgroundColor="Red"
+                    Command="{Binding AbortNav}"
+                    />
+
+                <Entry
+                    Keyboard="Telephone" 
+                    Grid.Column="2"
+                    Grid.Row="3"
+                    Grid.RowSpan="2"
+                    BackgroundColor="White"
+                    FontSize="Large"
+                    Placeholder="Line No"
+                    Text="{Binding CurLine, Mode=OneWayToSource}"
+                />
+
+                <Label
+                    Text="{Binding DistRemDisp}"
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    TextColor="White"
+                    FontSize="Large"
+                    VerticalOptions="Center"
+                />
+
+                <Label
+                    Text="{Binding DeviationDisp}"
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    TextColor="White"
+                    FontSize="Large"
+                    VerticalOptions="Center"
+                />
+
+            <Label
+                    Text="{Binding TrackCourse}"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    TextColor="White"
+                    FontSize="Large"
+                    VerticalOptions="Center"
+                />
+                
+            <Label
+                    Text="{Binding AccDisp}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    TextColor="White"
+                    FontSize="Large"
+                    VerticalTextAlignment="End"
+                />
+
+
+
+        </Grid>
+        </ContentPage.Content>
+</ContentPage>
+

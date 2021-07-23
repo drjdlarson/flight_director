@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodel="clr-namespace:flight_director.ViewModels"
+             x:Class="flight_director.Views.EnterNewLine"
+             Title="Enter New Line"
+             BackgroundColor="Black">
+    <ContentPage.BindingContext>
+        <viewmodel:AddLineViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label 
+                Text="Line ID"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand" 
+                TextColor="White"
+                />
+            <Entry
+                Placeholder="Line ID"
+                HorizontalTextAlignment="Center"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                Keyboard="Numeric"
+                WidthRequest="200"
+                Text="{Binding ID, Mode=OneWayToSource}"
+                />
+            <Label 
+                Text="Starting Lattitude"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand" 
+                TextColor="White"
+                />
+            <Entry
+                Placeholder="Starting Lattitude"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                Keyboard="Numeric"
+                WidthRequest="200"
+                HorizontalTextAlignment="Center"
+                Text="{Binding StartLat, Mode=OneWayToSource}"
+                />
+            <Label 
+                Text="Starting Longitude"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand" 
+                TextColor="White"
+                />
+            <Entry
+                Placeholder="Starting Longitude"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                Keyboard="Numeric"
+                WidthRequest="200"
+                HorizontalTextAlignment="Center"
+                Text="{Binding StartLon, Mode=OneWayToSource}"
+                />
+            <Label 
+                Text="Ending Lattitude"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand" 
+                TextColor="White"
+                />
+            <Entry
+                Placeholder="Ending Lattitude"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                Keyboard="Numeric"
+                WidthRequest="200"
+                HorizontalTextAlignment="Center"
+                Text="{Binding EndLat,Mode=OneWayToSource}"
+                />
+            <Label 
+                Text="Ending Longitude"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand" 
+                TextColor="White"
+                />
+            <Entry
+                Placeholder="Ending Longitude"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                Keyboard="Numeric"
+                WidthRequest="200"
+                HorizontalTextAlignment="Center"
+                Text="{Binding EndLon, Mode=OneWayToSource}"
+                />
+
+            <Button
+                Text="Save"
+                HeightRequest="50"
+                Command="{Binding SaveLine}"
+                />
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
