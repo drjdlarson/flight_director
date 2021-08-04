@@ -21,9 +21,9 @@
 	<key>MinimumOSVersion</key>
 	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>flight_director</string>
+	<string>Flight Director</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.flight_director</string>
+	<string>ua.rsc.flight_director</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>

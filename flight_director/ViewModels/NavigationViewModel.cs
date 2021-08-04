@@ -65,7 +65,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref lineid, value);
         }
 
-        private string status = "Stand By";
+        private string status = "Standby";
         public string Status
         {
             get => status;
@@ -149,6 +149,13 @@ namespace flight_director.ViewModels
             set => SetProperty(ref deviation, value);
         }
 
+        private double deviationnum = 0;
+        public double DeviationNum
+        {
+            get => deviationnum;
+            set => SetProperty(ref deviationnum, value);
+        }
+
         private string deviationdisp = "Deviation:";
         public string DeviationDisp
         {
@@ -193,7 +200,7 @@ namespace flight_director.ViewModels
 
         // General constant
         public const int WPRadius = 300; // waypoit radius in ft
-        public const double BarPerFeet = 35 / 10;
+        public const double BarPerFeet = 35 / 15;
 
         // Some functions
         public double Rad2Deg(double rad)
@@ -238,6 +245,7 @@ namespace flight_director.ViewModels
             //Initialize current position
             StatusColor = "White";
             EnableFlyTo = false;
+            Status = "Standby";
             var cur_pos = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10)));
             if (cur_pos == null)
             {
@@ -304,7 +312,8 @@ namespace flight_director.ViewModels
                     }
                     DistRem = (int)( 5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
                     double bearing_cur_pos = CalcCourse_rad(TargetLat,TargetLon,CurrentLat,CurrentLon);
-                    Deviation = DistRem * Sin(bearing_cur_pos - bearing_track)*BarPerFeet;
+                    DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
+                    Deviation = DeviationNum * BarPerFeet;
                     if (Abs(Deviation) > 110)
                     {
                         Deviation = Sign(Deviation) * 110;
@@ -314,7 +323,7 @@ namespace flight_director.ViewModels
                     Acc = (int)(cur_pos.Accuracy * 3.28084);
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    DeviationDisp = $"Deviation: {Abs((int)(Deviation / BarPerFeet))} ft";
+                    DeviationDisp = $"Deviation: {Abs((int)(DeviationNum))} ft";
                     DistRemDisp = $"Dist Rem: {DistRem} ft";
                     AccDisp = $"Acc: {Acc} ft";
                 }
@@ -360,7 +369,8 @@ namespace flight_director.ViewModels
                     }
                     DistRem = (int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
                     double bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
-                    Deviation = DistRem * Sin(bearing_cur_pos - bearing_track) * BarPerFeet;
+                    DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
+                    Deviation = DeviationNum * BarPerFeet;
                     if (Abs(Deviation) > 110)
                     {
                         Deviation = Sign(Deviation) * 110;
@@ -370,7 +380,7 @@ namespace flight_director.ViewModels
                     Acc = (int)(cur_pos.Accuracy * 3.28084);
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    DeviationDisp = $"Deviation: {Abs((int)(Deviation / BarPerFeet))} ft";
+                    DeviationDisp = $"Deviation: {Abs((int)(DeviationNum ))} ft";
                     DistRemDisp = $"Dist Rem: {DistRem} ft";
                     AccDisp = $"Acc: {Acc} ft";
                 }

@@ -12,7 +12,7 @@
         </ContentPage.BindingContext>
     <ContentPage.Content>
 
-            <Grid Margin="5,5,5,5">
+            <Grid Margin="1,1,5,5">
                 <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="7*"/>
@@ -30,7 +30,7 @@
                    Text="{Binding HeadingDisp}"
                    Grid.ColumnSpan="4"
                    TextColor="White"
-                   FontSize="25"
+                   FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="CenterAndExpand"
                  />
@@ -41,6 +41,7 @@
                    Grid.ColumnSpan="4" 
                     Grid.Row="1"
                    Rotation="{Binding HeadingComp}"
+                    Scale="0.98"
                      
                 />
 
@@ -66,7 +67,7 @@
                    Source="simulated_plane.png"
                    Grid.Row="1"
                    Grid.ColumnSpan="4"
-                   Scale=" 1.05"
+                   Scale=" 1.06"
                  />
 
                 <Label 
@@ -86,13 +87,17 @@
                 <Button 
                     Command="{Binding Flyto}"
                     IsEnabled="{Binding EnableFlyTo}"
+                    Padding="1"
                     Text="Fly To"
                     Grid.Row="3"
                     Grid.Column="3"
+                    FontSize="Small"
                  />
 
                 <Button 
                     Text="Abort"
+                    FontSize="Small"
+                    Padding="1"
                     Grid.Row="4"
                     Grid.Column="3"
                     BackgroundColor="Red"
