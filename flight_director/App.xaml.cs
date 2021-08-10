@@ -1,4 +1,5 @@
 ﻿using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace flight_director
 {
@@ -13,7 +14,7 @@ namespace flight_director
 
         protected override void OnStart()
         {
-
+            DeviceDisplay.KeepScreenOn = true;
         }
 
         protected override void OnSleep()

@@ -15,6 +15,7 @@ using flight_director.Services;
 using Xamarin.Forms;
 using static System.Math;
 using Command = Xamarin.Forms.Command;
+using flight_director.Views;
 
 [assembly: Dependency(typeof(FlightLineService))]
 
@@ -23,6 +24,13 @@ namespace flight_director.ViewModels
     public class NavigationViewModel : ViewModelBase
     {
         // UI Bindings
+        private string version = AppInfo.VersionString;
+        public string Version
+        {
+            get => version;
+            set => SetProperty(ref version, value);
+        }
+
         private bool enableflyto = true;
         public bool EnableFlyTo
         {
@@ -128,6 +136,20 @@ namespace flight_director.ViewModels
             set => SetProperty(ref currentlon, value);
         }
 
+        private double prevlat = 0;
+        public double PrevLat
+        {
+            get => prevlat;
+            set => SetProperty(ref prevlat, value);
+        }
+
+        private double prevlon = 0;
+        public double PrevLon
+        {
+            get => prevlon;
+            set => SetProperty(ref prevlon, value);
+        }
+
         private double targetlat = 0;
         public double TargetLat
         {
@@ -198,12 +220,39 @@ namespace flight_director.ViewModels
             set => SetProperty(ref acc, value);
         }
 
-        // General constant
-        public const int WPRadius = 300; // waypoit radius in ft
-        public const double BarPerFeet = 35 / 15;
+        // General Settings
+        public  int WPRadius
+        {
+            get => Preferences.Get(nameof(WPRadius),500);
+            set
+            {
+                Preferences.Set(nameof(WPRadius), value);
+                OnPropertyChanged(nameof(WPRadius));
+            }
+        }
 
-        // Some functions
-        public double Rad2Deg(double rad)
+        public int FeetperBar
+        {
+            get => Preferences.Get(nameof(FeetperBar), 15);
+            set
+            {
+                Preferences.Set(nameof(FeetperBar), value);
+                OnPropertyChanged(nameof(FeetperBar));
+            }
+        }
+
+        public int HeadingThreshold
+        {
+            get => Preferences.Get(nameof(HeadingThreshold), 10);
+            set
+            {
+                Preferences.Set(nameof(HeadingThreshold), value);
+                OnPropertyChanged(nameof(HeadingThreshold));
+            }
+        }
+
+    // Some functions
+    public double Rad2Deg(double rad)
         {
             return rad * 180 / Math.PI;
         }
@@ -228,7 +277,10 @@ namespace flight_director.ViewModels
         {
             Flyto = new AsyncCommand(Navigate);
             AbortNav = new Command(CancleNav);
+            ToSettings = new AsyncCommand(GotoSettings);
         }
+
+        public AsyncCommand ToSettings { get; }
         public AsyncCommand Flyto { get; }
         public ICommand AbortNav { get; }
 
@@ -237,16 +289,21 @@ namespace flight_director.ViewModels
             Abort = true;
         }
 
+        async Task GotoSettings()
+        {
+            await Shell.Current.GoToAsync(nameof(Settings));
+        }
 
         async Task Navigate()
         {
+            var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(1));
             /* Enter FlyTo Mode
              * flight_director navigate between current position and the start coordinate of the line*/
             //Initialize current position
             StatusColor = "White";
             EnableFlyTo = false;
             Status = "Standby";
-            var cur_pos = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10)));
+            var cur_pos = await Geolocation.GetLocationAsync(request);
             if (cur_pos == null)
             {
                 Status = "No GPS";
@@ -300,20 +357,22 @@ namespace flight_director.ViewModels
                     ButtonColor = "Gray";
                     return;
                 }
-                cur_pos = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10)));
-                if (cur_pos != null)
+                cur_pos = await Geolocation.GetLocationAsync(request);
+                if (cur_pos != null && cur_pos.Accuracy < 30)
                 {
                     CurrentLat = cur_pos.Latitude;
                     CurrentLon = cur_pos.Longitude;
-                    if (cur_pos.Course != null)
+                    if ((int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, PrevLat, PrevLon, DistanceUnits.Miles)) > HeadingThreshold)
                     {
-                        Heading = (double)cur_pos.Course;
-                        Course = -Rad2Deg(Deg2Rad(Heading) - track_course);
+                        Heading = (double)Rad2Deg(CalcCourse_rad(PrevLat, PrevLon, CurrentLat, CurrentLon));
+                        PrevLat = CurrentLat;
+                        PrevLon = CurrentLon;
+                        Course = (double)-Rad2Deg(Deg2Rad(Heading) - track_course);
                     }
                     DistRem = (int)( 5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
                     double bearing_cur_pos = CalcCourse_rad(TargetLat,TargetLon,CurrentLat,CurrentLon);
                     DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
-                    Deviation = DeviationNum * BarPerFeet;
+                    Deviation = DeviationNum * (35 / FeetperBar);
                     if (Abs(Deviation) > 110)
                     {
                         Deviation = Sign(Deviation) * 110;
@@ -323,11 +382,11 @@ namespace flight_director.ViewModels
                     Acc = (int)(cur_pos.Accuracy * 3.28084);
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    DeviationDisp = $"Deviation: {Abs((int)(DeviationNum))} ft";
+                    DeviationDisp = $"Deviation: {Abs((int)DeviationNum)} ft";
                     DistRemDisp = $"Dist Rem: {DistRem} ft";
                     AccDisp = $"Acc: {Acc} ft";
                 }
-                await Task.Delay(250);
+                await Task.Delay(15);
                 
             }
 
@@ -337,7 +396,6 @@ namespace flight_director.ViewModels
             CurrentLon = cur_line.StartLon;
             TargetLat = cur_line.EndLat;
             TargetLon = cur_line.EndLon;
-            track_course = CalcCourse_rad(CurrentLat, CurrentLon, TargetLat, TargetLon);
             bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
             //Recalculate remaining distance
             rem_miles = Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles);
@@ -357,20 +415,22 @@ namespace flight_director.ViewModels
                     ButtonColor = "Gray";
                     return;
                 }
-                cur_pos = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10)));
-                if (cur_pos != null)
+                cur_pos = await Geolocation.GetLocationAsync(request);
+                if (cur_pos != null && cur_pos.Accuracy < 30)
                 {
                     CurrentLat = cur_pos.Latitude;
                     CurrentLon = cur_pos.Longitude;
-                    if (cur_pos.Course != null)
+                    if ((int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, PrevLat, PrevLon, DistanceUnits.Miles)) > HeadingThreshold)
                     {
-                        Heading = (double)cur_pos.Course;
-                        Course = -Rad2Deg(Deg2Rad(Heading) - track_course);
+                        Heading = (double)Rad2Deg(CalcCourse_rad(PrevLat, PrevLon, CurrentLat, CurrentLon));
+                        PrevLat = CurrentLat;
+                        PrevLon = CurrentLon;
+                        Course = (double)-Rad2Deg(Deg2Rad(Heading) - trackcourse);
                     }
                     DistRem = (int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
                     double bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
                     DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
-                    Deviation = DeviationNum * BarPerFeet;
+                    Deviation = DeviationNum * (35 / FeetperBar);
                     if (Abs(Deviation) > 110)
                     {
                         Deviation = Sign(Deviation) * 110;
@@ -384,7 +444,7 @@ namespace flight_director.ViewModels
                     DistRemDisp = $"Dist Rem: {DistRem} ft";
                     AccDisp = $"Acc: {Acc} ft";
                 }
-                await Task.Delay(250);
+                await Task.Delay(15);
 
             }
             //Finish navigating

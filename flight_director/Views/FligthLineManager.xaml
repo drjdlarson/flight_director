@@ -79,6 +79,14 @@
                 </DataTemplate>
                 
             </ListView.ItemTemplate>
+            <ListView.Footer>
+                <StackLayout Orientation="Vertical">
+                    <Label Text="Pull to refresh page"
+                       TextColor="White"/>
+                    <Label Text="Tap and hold to delete line"
+                       TextColor="White"/>
+                </StackLayout>
+            </ListView.Footer>
         </ListView>
         
     </ContentPage.Content>

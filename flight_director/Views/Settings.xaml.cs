@@ -1,22 +1,20 @@
-﻿using flight_director.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace flight_director.Views
 {
-    public partial class FligthLineManager : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class Settings : ContentPage
     {
-        public FligthLineManager()
+        public Settings()
         {
             InitializeComponent();
-            BindingContext = new LineManagerViewModel();
-
         }
     }
 }

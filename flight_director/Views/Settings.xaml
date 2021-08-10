@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodel="clr-namespace:flight_director.ViewModels"
+             x:Class="flight_director.Views.Settings"
+             BackgroundColor="Black"
+             Title="Settings">
+    <ContentPage.BindingContext>
+        <viewmodel:NavigationViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Label
+                Text="Waypoint Radius (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                VerticalTextAlignment="Center"
+                />
+
+            <Entry
+                Text="{Binding WPRadius,Mode=TwoWay}"
+                Grid.Column="1"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Deviation bar distance (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="1"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding FeetperBar, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="1"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Course calculation threshold (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="2"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding HeadingThreshold, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="2"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="{Binding Version}"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="3"
+                />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

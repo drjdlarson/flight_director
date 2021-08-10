@@ -10,6 +10,12 @@
         <ContentPage.BindingContext>
              <viewmodels:NavigationViewModel/>
         </ContentPage.BindingContext>
+        <ContentPage.ToolbarItems>
+        <ToolbarItem
+                Text="Settings"
+                Command="{Binding ToSettings}">
+        </ToolbarItem>
+        </ContentPage.ToolbarItems>
     <ContentPage.Content>
 
             <Grid Margin="1,1,5,5">
@@ -92,6 +98,7 @@
                     Grid.Row="3"
                     Grid.Column="3"
                     FontSize="Small"
+                    BackgroundColor="DeepSkyBlue"
                  />
 
                 <Button 
