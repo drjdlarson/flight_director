@@ -19,7 +19,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref id, value);
         }
 
-        private double startlat, startlon, endlat, endlon;
+        private double startlat, startlon, startalt, endlat, endlon, endalt;
         public double StartLat
         {
             get => startlat;
@@ -29,6 +29,11 @@ namespace flight_director.ViewModels
         {
             get => startlon;
             set => SetProperty(ref startlon, value);
+        }
+        public double StartAlt
+        {
+            get => startalt;
+            set => SetProperty(ref startalt, value);
         }
         public double EndLat
         {
@@ -40,6 +45,11 @@ namespace flight_director.ViewModels
             get => endlon;
             set => SetProperty(ref endlon, value);
         }
+        public double EndAlt
+        {
+            get => endalt;
+            set => SetProperty(ref endalt, value);
+        }
 
         public AsyncCommand SaveLine { get; }
 
@@ -50,12 +60,12 @@ namespace flight_director.ViewModels
 
         async Task OnSave()
         {
-            if (id == 0 || startlat == 0 || startlon == 0 || endlat == 0 || endlon == 0)
+            if (id == 0 || startlat == 0 || startlon == 0 || endlat == 0 || endlon == 0 || startalt == 0 || endalt == 0)
             {
                 return;
             }
 
-            await FlightLineService.AddNewLine(id, startlat, startlon, endlat, endlon);
+            await FlightLineService.AddNewLine(id, startlat, startlon, startalt, endlat, endlon, endalt);
 
             await Shell.Current.GoToAsync("..");
 

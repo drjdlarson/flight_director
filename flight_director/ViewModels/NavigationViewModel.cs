@@ -136,6 +136,13 @@ namespace flight_director.ViewModels
             set => SetProperty(ref currentlon, value);
         }
 
+        private double currentalt = 0;
+        public double CurrentAlt
+        {
+            get => currentalt;
+            set => SetProperty(ref currentalt, value);
+        }
+
         private double prevlat = 0;
         public double PrevLat
         {
@@ -162,6 +169,13 @@ namespace flight_director.ViewModels
         {
             get => targetlon;
             set => SetProperty(ref targetlon, value);
+        }
+
+        private double targetalt = 0;
+        public double TargetAlt
+        {
+            get => targetalt;
+            set => SetProperty(ref targetalt, value);
         }
 
         private double deviation = 0;
@@ -220,6 +234,27 @@ namespace flight_director.ViewModels
             set => SetProperty(ref acc, value);
         }
 
+        private double vertdeviationnum = 0;
+        public double VertDeviationNum
+        {
+            get => vertdeviationnum;
+            set => SetProperty(ref vertdeviationnum, value);
+        }
+
+        private int vertdeviationdisp = 0;
+        public int VertDeviationDisp
+        {
+            get => vertdeviationdisp;
+            set => SetProperty(ref vertdeviationdisp, value);
+        }
+
+        private double vertdeviation = 0;
+        public double VertDeviation
+        {
+            get => vertdeviation;
+            set => SetProperty(ref vertdeviation, value);
+        }
+
         // General Settings
         public  int WPRadius
         {
@@ -238,6 +273,16 @@ namespace flight_director.ViewModels
             {
                 Preferences.Set(nameof(FeetperBar), value);
                 OnPropertyChanged(nameof(FeetperBar));
+            }
+        }
+
+        public int FeetperVertBar
+        {
+            get => Preferences.Get(nameof(FeetperVertBar), 20);
+            set
+            {
+                Preferences.Set(nameof(FeetperVertBar), value);
+                OnPropertyChanged(nameof(FeetperVertBar));
             }
         }
 
@@ -333,9 +378,13 @@ namespace flight_director.ViewModels
             LineID = cur_line.ID;
             TargetLat = cur_line.StartLat;
             TargetLon = cur_line.StartLon;
+            TargetAlt = cur_line.StartAlt;
             double track_course = CalcCourse_rad(CurrentLat, CurrentLon, TargetLat, TargetLon);
             double bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
             double trackcourse = CalcCourse_rad(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon);
+            double alt_dif = cur_line.StartAlt - cur_line.EndAlt;
+            double line_length = 5280 * Location.CalculateDistance(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
+            double gs_angle = Atan2(alt_dif,line_length);
             TrackCourse = $"Line's course: {(int)Rad2Deg(trackcourse)}";
 
 
@@ -362,6 +411,17 @@ namespace flight_director.ViewModels
                 {
                     CurrentLat = cur_pos.Latitude;
                     CurrentLon = cur_pos.Longitude;
+                    if (cur_pos.Altitude != 0)
+                    {
+                        CurrentAlt = 3.28084 * (double)cur_pos.Altitude;
+                        VertDeviationNum = CurrentAlt - TargetAlt;
+                        VertDeviationDisp = (int)VertDeviationNum;
+                        VertDeviation = VertDeviationNum * (34 / FeetperVertBar);
+                        if (Abs(VertDeviation)>80)
+                        {
+                            VertDeviation = Sign(VertDeviation) * 80;
+                        }
+                    }
                     if ((int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, PrevLat, PrevLon, DistanceUnits.Miles)) > HeadingThreshold)
                     {
                         Heading = (double)Rad2Deg(CalcCourse_rad(PrevLat, PrevLon, CurrentLat, CurrentLon));
@@ -428,6 +488,18 @@ namespace flight_director.ViewModels
                         Course = (double)-Rad2Deg(Deg2Rad(Heading) - trackcourse);
                     }
                     DistRem = (int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
+                    if (cur_pos.Altitude != 0)
+                    {
+                        CurrentAlt = 3.28084 * (double)cur_pos.Altitude;
+                        TargetAlt = cur_line.EndAlt + Tan(gs_angle) * DistRem;
+                        VertDeviationNum = CurrentAlt - TargetAlt;
+                        VertDeviationDisp = (int)VertDeviationNum;
+                        VertDeviation = VertDeviationNum * (34 / FeetperVertBar);
+                        if (Abs(VertDeviation) > 80)
+                        {
+                            VertDeviation = Sign(VertDeviation) * 80;
+                        }
+                    }
                     double bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
                     DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
                     Deviation = DeviationNum * (35 / FeetperBar);

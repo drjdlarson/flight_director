@@ -18,6 +18,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Label
                 Text="Waypoint Radius (ft)"
@@ -47,18 +48,33 @@
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
-
+            
             <Label
-                Text="Course calculation threshold (ft)"
+                Text="Vertical deviation bar distance (ft)"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="2"
                 VerticalTextAlignment="Center"
                 />
             <Entry
-                Text="{Binding HeadingThreshold, Mode=TwoWay}"
+                Text="{Binding FeetperVertBar, Mode=TwoWay}"
                 Grid.Column="1"
                 Grid.Row="2"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Course calculation threshold (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="3"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding HeadingThreshold, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="3"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -67,7 +83,7 @@
                 Text="{Binding Version}"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="3"
+                Grid.Row="4"
                 />
         </Grid>
     </ContentPage.Content>

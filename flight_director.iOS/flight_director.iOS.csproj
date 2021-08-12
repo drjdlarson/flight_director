@@ -172,4 +172,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\deviation_bar.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\gs_indicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\gs_scale.png" />
+  </ItemGroup>
 </Project>

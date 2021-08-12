@@ -9,15 +9,16 @@
         <viewmodel:AddLineViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label 
-                Text="Line ID"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="CenterAndExpand" 
-                TextColor="White"
-                />
-            <Entry
+        <ScrollView>
+            <StackLayout>
+                <Label 
+                    Text="Line ID"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
                 Placeholder="Line ID"
                 HorizontalTextAlignment="Center"
                 FontSize="Large"
@@ -27,82 +28,120 @@
                 WidthRequest="200"
                 Text="{Binding ID, Mode=OneWayToSource}"
                 />
-            <Label 
-                Text="Starting Lattitude"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="CenterAndExpand" 
-                TextColor="White"
-                />
-            <Entry
-                Placeholder="Starting Lattitude"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"
-                BackgroundColor="White"
-                Keyboard="Numeric"
-                WidthRequest="200"
-                HorizontalTextAlignment="Center"
-                Text="{Binding StartLat, Mode=OneWayToSource}"
-                />
-            <Label 
-                Text="Starting Longitude"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="CenterAndExpand" 
-                TextColor="White"
-                />
-            <Entry
-                Placeholder="Starting Longitude"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"
-                BackgroundColor="White"
-                Keyboard="Numeric"
-                WidthRequest="200"
-                HorizontalTextAlignment="Center"
-                Text="{Binding StartLon, Mode=OneWayToSource}"
-                />
-            <Label 
-                Text="Ending Lattitude"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="CenterAndExpand" 
-                TextColor="White"
-                />
-            <Entry
-                Placeholder="Ending Lattitude"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"
-                BackgroundColor="White"
-                Keyboard="Numeric"
-                WidthRequest="200"
-                HorizontalTextAlignment="Center"
-                Text="{Binding EndLat,Mode=OneWayToSource}"
-                />
-            <Label 
-                Text="Ending Longitude"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="CenterAndExpand" 
-                TextColor="White"
-                />
-            <Entry
-                Placeholder="Ending Longitude"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"
-                BackgroundColor="White"
-                Keyboard="Numeric"
-                WidthRequest="200"
-                HorizontalTextAlignment="Center"
-                Text="{Binding EndLon, Mode=OneWayToSource}"
-                />
+                <Label 
+                    Text="Starting Lattitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Starting Lattitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding StartLat, Mode=OneWayToSource}"
+                    />
+                <Label 
+                    Text="Starting Longitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Starting Longitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding StartLon, Mode=OneWayToSource}"
+                    />
+            
+                <Label 
+                    Text="Starting Altitude in feet (WGS84)"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Starting Altitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding StartAlt, Mode=OneWayToSource}"
+                    />
+            
+                <Label 
+                    Text="Ending Lattitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Ending Lattitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding EndLat,Mode=OneWayToSource}"
+                    />
+                <Label 
+                    Text="Ending Longitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Ending Longitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding EndLon, Mode=OneWayToSource}"
+                    />
+            
+                <Label 
+                    Text="Ending Altitude in feet (WGS84)"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Ending Altitude"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding EndAlt, Mode=OneWayToSource}"
+                    />
 
-            <Button
-                Text="Save"
-                HeightRequest="50"
-                Command="{Binding SaveLine}"
-                />
-
-
-        </StackLayout>
+                <Button
+                    Text="Save"
+                    HeightRequest="50"
+                    Command="{Binding SaveLine}"
+                    WidthRequest="20"
+                    BackgroundColor="Gray"
+                    />
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

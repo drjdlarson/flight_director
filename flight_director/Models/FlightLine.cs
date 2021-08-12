@@ -10,8 +10,10 @@ namespace flight_director.Models
         public int ID { get; set; }
         public double StartLat { get; set; }
         public double StartLon { get; set; }
+        public double StartAlt { get; set; }
         public double EndLat { get; set; }
         public double EndLon { get; set; }
+        public double EndAlt { get; set; }
 
     }
 }

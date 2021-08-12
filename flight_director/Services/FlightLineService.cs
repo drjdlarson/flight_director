@@ -28,7 +28,7 @@ namespace flight_director.Services
             await db.CreateTableAsync<FlightLine>();
         }
 
-        public static async Task AddNewLine(int id, double startlat, double startlon, double endlat, double endlon)
+        public static async Task AddNewLine(int id, double startlat, double startlon, double startalt, double endlat, double endlon, double endalt)
         {
             await Init();
             var flightline = new FlightLine
@@ -36,8 +36,10 @@ namespace flight_director.Services
                 ID = id,
                 StartLat = startlat,
                 StartLon = startlon,
+                StartAlt = startalt,
                 EndLat = endlat,
-                EndLon = endlon
+                EndLon = endlon,
+                EndAlt = endalt
             };
             await db.InsertAsync(flightline);
             

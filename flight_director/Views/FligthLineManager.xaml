@@ -24,7 +24,7 @@
             IsRefreshing="{Binding IsBusy, Mode=OneWay}"
             SelectionMode="None"
             SeparatorColor="White"
-            RowHeight="80">
+            RowHeight="100">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:FlightLine">
                     <ViewCell>
@@ -38,6 +38,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -47,9 +48,10 @@
                             </Grid.ColumnDefinitions>
                             <Label VerticalOptions="Center"
                                    Text="{Binding ID}"
-                                   Grid.RowSpan="2"
+                                   Grid.RowSpan="3"
                                    TextColor="White"
                                    FontSize="Large"
+                                   VerticalTextAlignment="Center"
                                    FontAttributes="Bold"/>
                             <Label Text="{Binding StartLat}"
                                    Grid.Column="1"
@@ -62,6 +64,12 @@
                                    TextColor="White"
                                    FontSize="Large"
                                    />
+                            <Label Text="{Binding StartAlt}"
+                                   Grid.Column="1"
+                                   Grid.Row="2"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
                             <Label Text="{Binding EndLat}"
                                    Grid.Column="2"
                                    TextColor="White"
@@ -70,6 +78,12 @@
                             <Label Text="{Binding EndLon}"
                                    Grid.Column="2"
                                    Grid.Row="1"
+                                   TextColor="White"
+                                   FontSize="Large"
+                                   />
+                            <Label Text="{Binding EndAlt}"
+                                   Grid.Column="2"
+                                   Grid.Row="2"
                                    TextColor="White"
                                    FontSize="Large"
                                    />

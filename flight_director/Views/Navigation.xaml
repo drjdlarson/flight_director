@@ -28,9 +28,10 @@
             </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="0.25*"/>
                     <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
                 <Label 
                    Text="{Binding HeadingDisp}"
@@ -52,6 +53,21 @@
                 />
 
                 <Image
+                    Source="gs_scale.png"
+                    Grid.Column="4"
+                    Grid.Row="1"
+                    Scale="0.99"
+                 />
+
+                <Image
+                    Source="gs_indicator.png"
+                    Grid.Column="4"
+                    Grid.Row="1"
+                    TranslationX="0.2"
+                    TranslationY="{Binding VertDeviation}"
+                 />
+
+            <Image
                     Source="course_indicator.png"
                     Grid.Row="1"
                     Grid.ColumnSpan="4"
@@ -76,11 +92,23 @@
                    Scale=" 1.06"
                  />
 
+                <Label
+                    Text="{Binding VertDeviationDisp}"
+                    TextColor="white"
+                    Grid.Column="3"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    TranslationY="75"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="End"
+                    
+                 />
+
                 <Label 
                    Text="{Binding Status}"
                    Grid.Row="2"
                    Grid.Column="2"
-                   Grid.ColumnSpan="2"
+                   Grid.ColumnSpan="3"
                    FontSize="Large"
                    TextColor="{Binding StatusColor}"
                    VerticalOptions="CenterAndExpand"
@@ -97,6 +125,7 @@
                     Text="Fly To"
                     Grid.Row="3"
                     Grid.Column="3"
+                    Grid.ColumnSpan="2"
                     FontSize="Small"
                     BackgroundColor="DeepSkyBlue"
                  />
@@ -107,6 +136,7 @@
                     Padding="1"
                     Grid.Row="4"
                     Grid.Column="3"
+                    Grid.ColumnSpan="2"
                     BackgroundColor="Red"
                     Command="{Binding AbortNav}"
                     />
