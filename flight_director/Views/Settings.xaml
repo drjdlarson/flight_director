@@ -19,6 +19,8 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Label
                 Text="Waypoint Radius (ft)"
@@ -80,10 +82,42 @@
                 />
 
             <Label
-                Text="{Binding Version}"
+                Text="Antenna offset angle (degree) - clockwise from aft is positive"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="4"
+                VerticalTextAlignment="Center"
+                />
+            
+            <Entry
+                Text="{Binding AntennaAngle, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="4"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Reverse the line?"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="5"
+                VerticalTextAlignment="Center"
+                />
+
+            <CheckBox
+                Color="{StaticResource Primary}"
+                IsChecked="{Binding IsReversed, Mode=TwoWay}"
+                Grid.Row="5"
+                Grid.Column="1"
+                HorizontalOptions="End"
+                />
+
+            <Label
+                Text="{Binding Version}"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="6"
                 />
         </Grid>
     </ContentPage.Content>

@@ -32,6 +32,10 @@
                       Icon="list.png"
                       ContentTemplate="{DataTemplate local:FligthLineManager}"
                       />
+        <ShellContent Title="Help" 
+                      Icon="help.png"
+                      ContentTemplate="{DataTemplate local:HelpView}"
+                      />
     </TabBar>
 
 

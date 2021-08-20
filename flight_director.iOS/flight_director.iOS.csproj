@@ -138,6 +138,9 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime">
+      <Version>100.11.2</Version>
+    </PackageReference>
     <PackageReference Include="Refractored.MvvmHelpers">
       <Version>1.6.2</Version>
     </PackageReference>
@@ -177,5 +180,8 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\gs_scale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\help.png" />
   </ItemGroup>
 </Project>

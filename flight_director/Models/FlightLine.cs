@@ -14,6 +14,7 @@ namespace flight_director.Models
         public double EndLat { get; set; }
         public double EndLon { get; set; }
         public double EndAlt { get; set; }
+        public double AvgEle { get; set; }
 
     }
 }

@@ -38,6 +38,13 @@ namespace flight_director.ViewModels
             set => SetProperty(ref enableflyto, value);
         }
 
+        private double deviationoffset = 0;
+        public double DeviationOffset
+        {
+            get => deviationoffset;
+            set => SetProperty(ref deviationoffset, value);
+        }
+
         private bool abort = false;
         public bool Abort
         {
@@ -296,8 +303,27 @@ namespace flight_director.ViewModels
             }
         }
 
-    // Some functions
-    public double Rad2Deg(double rad)
+        public int AntennaAngle
+        {
+            get => Preferences.Get(nameof(AntennaAngle), 10);
+            set
+            {
+                Preferences.Set(nameof(AntennaAngle), value);
+                OnPropertyChanged(nameof(AntennaAngle));
+            }
+        }
+        public bool IsReversed
+        {
+            get => Preferences.Get(nameof(IsReversed), false);
+            set
+            {
+                Preferences.Set(nameof(IsReversed), value);
+                OnPropertyChanged(nameof(IsReversed));
+            }
+        }
+
+        // Some functions
+        public double Rad2Deg(double rad)
         {
             return rad * 180 / Math.PI;
         }
@@ -317,6 +343,7 @@ namespace flight_director.ViewModels
             return Deg2Rad((bearing_deg + 360) % 360);
 
         }
+
 
         public NavigationViewModel()
         {
@@ -379,21 +406,39 @@ namespace flight_director.ViewModels
             TargetLat = cur_line.StartLat;
             TargetLon = cur_line.StartLon;
             TargetAlt = cur_line.StartAlt;
-            double track_course = CalcCourse_rad(CurrentLat, CurrentLon, TargetLat, TargetLon);
-            double bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
             double trackcourse = CalcCourse_rad(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon);
             double alt_dif = cur_line.StartAlt - cur_line.EndAlt;
+            if (IsReversed == true)
+            {
+                TargetLat = cur_line.EndLat;
+                TargetLon = cur_line.EndLon;
+                TargetAlt = cur_line.EndAlt;
+                trackcourse = CalcCourse_rad(cur_line.EndLat, cur_line.EndLon, cur_line.StartLat, cur_line.StartLon);
+                alt_dif = cur_line.EndAlt - cur_line.StartAlt;
+            }
+
+            double track_course = CalcCourse_rad(CurrentLat, CurrentLon, TargetLat, TargetLon);
+            double bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
             double line_length = 5280 * Location.CalculateDistance(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
             double gs_angle = Atan2(alt_dif,line_length);
             TrackCourse = $"Line's course: {(int)Rad2Deg(trackcourse)}";
+            double bearing_cur_pos;
 
 
             //Begin navigating in Flyto
-            Status = $"Flying to line {LineID}";
+            if (IsReversed == true)
+            {
+                Status = $"Flying to line {LineID}*";
+            }
+            else
+            {
+                Status = $"Flying to line {LineID}";
+            }
             double rem_miles = Location.CalculateDistance(CurrentLat,CurrentLon,TargetLat,TargetLon,DistanceUnits.Miles);
             double rem_ft = rem_miles * 5280;
             DistRem = (int)rem_ft;
             ButtonColor = "Red";
+            DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
 
             // FlyTo Loop
             while (DistRem > WPRadius) //Check if beginning of first waypoint is reached
@@ -430,8 +475,8 @@ namespace flight_director.ViewModels
                         Course = (double)-Rad2Deg(Deg2Rad(Heading) - track_course);
                     }
                     DistRem = (int)( 5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
-                    double bearing_cur_pos = CalcCourse_rad(TargetLat,TargetLon,CurrentLat,CurrentLon);
-                    DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
+                    bearing_cur_pos = CalcCourse_rad(TargetLat,TargetLon,CurrentLat,CurrentLon);
+                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track)) + DeviationOffset;
                     Deviation = DeviationNum * (35 / FeetperBar);
                     if (Abs(Deviation) > 110)
                     {
@@ -452,10 +497,22 @@ namespace flight_director.ViewModels
 
             // When arrive at starting waypoint of line
             // Set the start and end coordinate to the lines coordinates
-            CurrentLat = cur_line.StartLat;
-            CurrentLon = cur_line.StartLon;
-            TargetLat = cur_line.EndLat;
-            TargetLon = cur_line.EndLon;
+            if (IsReversed == true)
+            {
+                CurrentLat = cur_line.EndLat;
+                CurrentLon = cur_line.EndLon;
+                TargetLat = cur_line.StartLat;
+                TargetLon = cur_line.StartLon;
+                Status = $"Flying line {LineID}*";
+            }
+            else
+            {
+                CurrentLat = cur_line.StartLat;
+                CurrentLon = cur_line.StartLon;
+                TargetLat = cur_line.EndLat;
+                TargetLon = cur_line.EndLon;
+                Status = $"Flying line {LineID}";
+            }
             bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
             //Recalculate remaining distance
             rem_miles = Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles);
@@ -463,7 +520,7 @@ namespace flight_director.ViewModels
             DistRem = (int)rem_ft;
             // Update status to Navigate mode (follow the refeence trajectory)
             ButtonColor = "Green";
-            Status = $"Flying line {LineID}";
+            
             //Line Navigating loop
             while (DistRem > WPRadius) //Check if beginning of first waypoint is reached
             {
@@ -492,6 +549,10 @@ namespace flight_director.ViewModels
                     {
                         CurrentAlt = 3.28084 * (double)cur_pos.Altitude;
                         TargetAlt = cur_line.EndAlt + Tan(gs_angle) * DistRem;
+                        if (IsReversed == true)
+                        {
+                            TargetAlt = cur_line.StartAlt + Tan(gs_angle) * DistRem;
+                        }
                         VertDeviationNum = CurrentAlt - TargetAlt;
                         VertDeviationDisp = (int)VertDeviationNum;
                         VertDeviation = VertDeviationNum * (34 / FeetperVertBar);
@@ -500,8 +561,9 @@ namespace flight_director.ViewModels
                             VertDeviation = Sign(VertDeviation) * 80;
                         }
                     }
-                    double bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
-                    DeviationNum = DistRem * Sin(bearing_cur_pos - bearing_track);
+                    DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));
+                    bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
+                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track)) + DeviationOffset;
                     Deviation = DeviationNum * (35 / FeetperBar);
                     if (Abs(Deviation) > 110)
                     {
@@ -523,6 +585,16 @@ namespace flight_director.ViewModels
             EnableFlyTo = true;
             ButtonColor = "Gray";
             Status = "Stand By";
+            HeadingComp = 0;
+            HeadingDisp = 0;
+            DeviationDisp = "Deviation: ";
+            VertDeviationDisp = 0;
+            VertDeviation = 0;
+            AccDisp = "Acc:";
+            DistRemDisp = "Dist Rem:";
+            TrackCourse = "Line's Course: ";
+            Course = 0;
+
         }
 
 

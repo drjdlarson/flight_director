@@ -64,7 +64,7 @@
                     />
             
                 <Label 
-                    Text="Starting Altitude in feet (WGS84)"
+                    Text="Starting Altitude in feet (MSL)"
                     FontSize="Large"
                     FontAttributes="Bold"
                     HorizontalOptions="CenterAndExpand" 
@@ -117,7 +117,7 @@
                     />
             
                 <Label 
-                    Text="Ending Altitude in feet (WGS84)"
+                    Text="Ending Altitude in feet (MSL)"
                     FontSize="Large"
                     FontAttributes="Bold"
                     HorizontalOptions="CenterAndExpand" 
@@ -132,6 +132,24 @@
                     WidthRequest="200"
                     HorizontalTextAlignment="Center"
                     Text="{Binding EndAlt, Mode=OneWayToSource}"
+                    />
+
+                <Label 
+                    Text="Average Ground Elevation in feet"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Entry
+                    Placeholder="Average Elevation"
+                    FontSize="Large"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding AvgEle, Mode=OneWayToSource}"
                     />
 
                 <Button

@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="flight_director.Views.HelpView"
+             BackgroundColor="Black"
+             Title="Help">
+    <ContentPage.Content>
+        <ScrollView Margin="3,3,5,5">
+            <StackLayout>
+                <Label
+                    Text ="External GPS setup"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    />
+                <Label
+                    Text ="- Mount GPS module to windshield. Connect the USB cable from the module to the tablet"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+                <Label
+                    Text ="- Start the GPS Connector app and configure GNSS as follow:"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+                <Label
+                    Text ="     - GNSS Device as USB Device"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+
+                <Label
+                    Text ="     - USB Vendor as Generic"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+                
+                <Label
+                    Text ="     - Baudrate as 115200"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+                
+                <Label
+                    Text ="     - Estimate accuracy to OFF"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+
+                <Label
+                    Text ="     - GPS Mock Location to ON"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+
+                <Label
+                    Text ="     - GPS Mock Height to Orthometric Height"
+                    TextColor="White"
+                    FontSize="Body"
+                    />
+
+                <Label
+                    Text ="- If set up correctly, a stream would start in the Terminal Page"
+                    TextColor="White"
+                    FontSize="Body"/>
+
+                <Label
+                    Text ="- Ensure mock location is active on Android by Setting/Developer options/Select mock location app and select GPS Connector"
+                    TextColor="White"
+                    FontSize="Body"/>
+
+                <Label
+                    Text ="Using Flight Director"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    />
+                <Label
+                    Text ="Flight Line Manager"
+                    TextColor="White"
+                    FontSize="Body"/>
+
+                <Label
+                    Text ="     - Tap Add to enter new flight lines parameter"
+                    TextColor="White"
+                    FontSize="Body"/>
+                <Label
+                    Text ="- Note: Line ID needs to be an unique integer. Start with 1 and go up"
+                    TextColor="White"
+                    FontSize="Small"
+                    Margin="40,0,20,0"/>
+                <Label
+                    Text ="     - Pull to refresh after adding a line"
+                    TextColor="White"
+                    FontSize="Body"/>
+
+                <Label
+                    Text ="Navigation"
+                    TextColor="White"
+                    FontSize="Body"/>
+
+                <Label
+                    Text ="- Page include graphical HSI and GSI with numeric course and numeric vertical deviation display"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Acc show the 3D GPS accuracy in feet"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Line's course shows the ground course of the current line"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Dist Rem is the distance remaining on the current line to fly in feet"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Deviation is the lateral deviation in feet"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="- Stand by box is the status display. Available status are:"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="- Standby: app in standby mode"
+                    TextColor="White"
+                    FontSize="Small"
+                    Margin="40,0,20,0"/>
+                <Label
+                    Text ="- Invalid line: invalid line ID was entered"
+                    TextColor="White"
+                    FontSize="Small"
+                    Margin="40,0,20,0"/>
+
+                <Label
+                    Text ="- Flying to line # : navigating to the starting coordinate of line #. An * will follow if the line is reversed"
+                    TextColor="White"
+                    FontSize="Small"
+                    Margin="40,0,20,0"/>
+
+                <Label
+                    Text ="- Flying line # : navigating the line #. An * will follow if the line is reversed"
+                    TextColor="White"
+                    FontSize="Small"
+                    Margin="40,0,20,0"/>
+                <Label
+                    Text ="- Line No box allows for desired line number entry"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="- Tap Flyto button to begine navigating to the desired line and navigating the line"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="- Tap Abort to cancel navigation mode at anytime if wish to do so"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="Settings"
+                    TextColor="White"
+                    FontSize="Body"/>
+                <Label
+                    Text ="- Waypoint radius: distance in feet to a waypoint where it's considered completed. Larger value for shallower turns"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+                <Label
+                    Text ="- Deviation bar distance: distance in feet that each horization deviation dot indicate"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Vertical deviation bar distance: distance in feet that each vertical deviation dot indicate"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Course calculation threshold: minimum distance in feet between each GPS location before a course calculation is performed. Smaller values result in jumpier readings. Larger value is less jumpy but animation maynot be smooth if aircraft is slow moving. At 10ft, 60mph was tested to be smooth enough"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Antenna offset angle: the angle from NADIR of the antenna. Value is positive if antenna is tilted clockwise when looking from the back of the plane"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+                <Label
+                    Text ="- Reverse the line?: check the box if chose to fly the line in the opposite direction"
+                    TextColor="White"
+                    FontSize="Body"
+                    Margin="20,0,20,0"/>
+
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
