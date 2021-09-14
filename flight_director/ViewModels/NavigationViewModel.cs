@@ -626,7 +626,7 @@ namespace flight_director.ViewModels
                         }
                         VertDeviationNum = CurrentAlt - TargetAlt;
                         VertDeviationDisp = (int)VertDeviationNum;
-                        VertDeviation = VertDeviationNum * (35 / FeetperVertBar);
+                        VertDeviation = VertDeviationNum * (VerBarUnit / FeetperVertBar);
                         if (Abs(VertDeviation) > VerBarUnit * 2.2)
                         {
                             VertDeviation = Sign(VertDeviation) * VerBarUnit * 2.2;

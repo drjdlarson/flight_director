@@ -163,6 +163,7 @@
                     BackgroundColor="White"
                     FontSize="Large"
                     Placeholder="Line No"
+                    ClearButtonVisibility="WhileEditing"
                     Text="{Binding LineSeq, Mode=OneWayToSource}"
                 />
 
