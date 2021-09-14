@@ -693,7 +693,15 @@ namespace flight_director.ViewModels
                 if (PrevLine == true)
                 {
                     PrevLine = false;
-                    i = i - 2;
+                    if (i != 0)
+                    {
+                        i = i - 2;
+                    }
+                    else
+                    {
+                        i = -1;
+                    }
+                    
                 }
 
             }
