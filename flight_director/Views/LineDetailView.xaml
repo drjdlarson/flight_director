@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodel="clr-namespace:flight_director.ViewModels"
+             x:Class="flight_director.Views.LineDetailView"
+             Title="Line Details"
+             BackgroundColor="Black">
+    <ContentPage.BindingContext>
+        <viewmodel:LineDetailViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Label 
+                    Text="Line ID"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding ID}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+
+                <Label 
+                    Text="Starting Lattitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding StartLat}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+                <Label 
+                    Text="Starting Longitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding StartLon}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+
+                <Label 
+                    Text="Starting Altitude in feet (MSL)"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding StartAlt}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+
+                <Label 
+                    Text="Ending Lattitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding EndLat}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+                <Label 
+                    Text="Ending Longitude"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding EndLon}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+
+                <Label 
+                    Text="Ending Altitude in feet (MSL)"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding EndAlt}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+
+                <Label 
+                    Text="Average Ground Elevation in feet"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" 
+                    TextColor="White"
+                    />
+                <Label
+                    Text="{Binding AvgEle}"
+                    TextColor="White"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

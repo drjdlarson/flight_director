@@ -18,11 +18,12 @@
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
 
-            <Grid Margin="3,3,5,5">
+            <Grid Margin="0,0,0,1"
+                  >
                 <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="7*"/>
-                    <RowDefinition />
+                    <RowDefinition Height="0.5*"/>
                     <RowDefinition Height="0.5*"/>
                     <RowDefinition Height="0.5*"/>
             </Grid.RowDefinitions>
@@ -116,9 +117,23 @@
                    BackgroundColor="{Binding ButtonColor}"
                  />
 
-
-
                 <Button 
+                    Text="Prev"
+                    FontSize="10"    
+                    BackgroundColor="DeepSkyBlue"
+                    Command="{Binding Prev}"
+                 />
+                
+                <Button 
+                    Text="Next"
+                    FontSize="10"    
+                    Grid.Column="3"
+                    Grid.ColumnSpan="2"
+                    BackgroundColor="DeepSkyBlue"
+                    Command="{Binding Skip}"
+                 />
+
+            <Button 
                     BackgroundColor="DeepSkyBlue"
                     Command="{Binding Flyto}"
                     IsEnabled="{Binding EnableFlyTo}"
@@ -141,15 +156,14 @@
                     Command="{Binding AbortNav}"
                     />
 
-                <Entry
-                    Keyboard="Telephone" 
+                <Entry 
                     Grid.Column="2"
                     Grid.Row="3"
                     Grid.RowSpan="2"
                     BackgroundColor="White"
                     FontSize="Large"
                     Placeholder="Line No"
-                    Text="{Binding CurLine, Mode=OneWayToSource}"
+                    Text="{Binding LineSeq, Mode=OneWayToSource}"
                 />
 
                 <Label

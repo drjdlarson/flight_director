@@ -10,6 +10,7 @@ namespace flight_director
             InitializeComponent();
             Routing.RegisterRoute(nameof(EnterNewLine), typeof(EnterNewLine));
             Routing.RegisterRoute(nameof(Settings), typeof(Settings));
+            Routing.RegisterRoute(nameof(LineDetailView), typeof(LineDetailView));
         }
 
     }

@@ -69,5 +69,11 @@ namespace flight_director.Services
             await Init();
             await db.DeleteAsync<FlightLine>(id);
         }
+
+        public static async Task RemoveAllLine()
+        {
+            await Init();
+            await db.DeleteAllAsync<FlightLine>();
+        }
     }
 }

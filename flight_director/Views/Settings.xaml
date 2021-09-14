@@ -21,14 +21,17 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+
             </Grid.RowDefinitions>
+            
             <Label
                 Text="Waypoint Radius (ft)"
                 TextColor="White"
                 FontSize="Medium"
                 VerticalTextAlignment="Center"
                 />
-
             <Entry
                 Text="{Binding WPRadius,Mode=TwoWay}"
                 Grid.Column="1"
@@ -50,18 +53,48 @@
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
-            
+
             <Label
-                Text="Vertical deviation bar distance (ft)"
+                Text="Horizontal Bar Unit"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="2"
                 VerticalTextAlignment="Center"
                 />
             <Entry
-                Text="{Binding FeetperVertBar, Mode=TwoWay}"
+                Text="{Binding HorBarUnit, Mode=TwoWay}"
                 Grid.Column="1"
                 Grid.Row="2"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Vertical deviation bar distance (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="3"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding FeetperVertBar, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="3"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Vertical Bar Unit"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="4"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding VerBarUnit, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="4"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -70,13 +103,13 @@
                 Text="Course calculation threshold (ft)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="3"
+                Grid.Row="5"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding HeadingThreshold, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="3"
+                Grid.Row="5"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -85,40 +118,25 @@
                 Text="Antenna offset angle (degree) - clockwise from aft is positive"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="4"
+                Grid.Row="6"
                 VerticalTextAlignment="Center"
                 />
-            
             <Entry
                 Text="{Binding AntennaAngle, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="4"
+                Grid.Row="6"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
 
-            <Label
-                Text="Reverse the line?"
-                TextColor="White"
-                FontSize="Medium"
-                Grid.Row="5"
-                VerticalTextAlignment="Center"
-                />
-
-            <CheckBox
-                Color="{StaticResource Primary}"
-                IsChecked="{Binding IsReversed, Mode=TwoWay}"
-                Grid.Row="5"
-                Grid.Column="1"
-                HorizontalOptions="End"
-                />
 
             <Label
                 Text="{Binding Version}"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="6"
+                Grid.Row="8"
                 />
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

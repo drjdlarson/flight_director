@@ -13,6 +13,10 @@
             Text="Add"
             Command="{Binding AddFligthLine}">
         </ToolbarItem>
+        <ToolbarItem
+            Text="Load"
+            Command="{Binding LoadFligthLine}">
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ListView
@@ -29,6 +33,10 @@
                 <DataTemplate x:DataType="model:FlightLine">
                     <ViewCell>
                         <ViewCell.ContextActions>
+                            <MenuItem Text="View"
+                                      CommandParameter="{Binding .}"
+                                      Command="{Binding Source={x:Reference LineManager},Path=BindingContext.SelectLine}"
+                                      />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
                                       CommandParameter="{Binding .}"
@@ -87,6 +95,7 @@
                                    TextColor="White"
                                    FontSize="Large"
                                    />
+
                         </Grid>
                     </ViewCell>
                     
