@@ -23,6 +23,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
 
             </Grid.RowDefinitions>
             
@@ -40,7 +41,7 @@
                 />
 
             <Label
-                Text="Deviation bar distance (ft)"
+                Text="Deviation bar distance (ft) - Approach"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="1"
@@ -55,16 +56,31 @@
                 />
 
             <Label
-                Text="Horizontal Bar Unit"
+                Text="Deviation bar distance (ft) - Precision"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="2"
                 VerticalTextAlignment="Center"
                 />
             <Entry
-                Text="{Binding HorBarUnit, Mode=TwoWay}"
+                Text="{Binding FeetperBarPrecise, Mode=TwoWay}"
                 Grid.Column="1"
                 Grid.Row="2"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Horizontal Bar Unit"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="3"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding HorBarUnit, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="3"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -73,13 +89,13 @@
                 Text="Vertical deviation bar distance (ft)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="3"
+                Grid.Row="4"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding FeetperVertBar, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="3"
+                Grid.Row="4"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -88,13 +104,13 @@
                 Text="Vertical Bar Unit"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="4"
+                Grid.Row="5"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding VerBarUnit, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="4"
+                Grid.Row="5"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -103,13 +119,13 @@
                 Text="Course calculation threshold (ft)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="5"
+                Grid.Row="6"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding HeadingThreshold, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="5"
+                Grid.Row="6"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -118,13 +134,13 @@
                 Text="Antenna offset angle (degree) - clockwise from aft is positive"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="6"
+                Grid.Row="7"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding AntennaAngle, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="6"
+                Grid.Row="7"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -134,7 +150,7 @@
                 Text="{Binding Version}"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="8"
+                Grid.Row="9"
                 />
             
         </Grid>

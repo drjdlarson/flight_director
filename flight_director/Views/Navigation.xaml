@@ -18,7 +18,7 @@
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
 
-            <Grid Margin="0,0,0,1"
+            <Grid Margin="0,0,0,0"
                   >
                 <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -29,10 +29,10 @@
             </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="0.25*"/>
                     <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    
             </Grid.ColumnDefinitions>
                 <Label 
                    Text="{Binding HeadingDisp}"
@@ -52,20 +52,46 @@
                     Scale="0.98"
                      
                 />
-
-                <Image
-                    Source="gs_scale.png"
-                    Grid.Column="4"
+            <Rectangle
+                    Fill="#696969"
                     Grid.Row="1"
-                    Scale="0.99"
+                    Grid.Column="3"
+                    HeightRequest="150"
+                    WidthRequest="50"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    Stroke="White"
+                    StrokeThickness="3"
+                />
+            <Rectangle
+                    Fill="#696969"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    TranslationY="-99"
+                    Stroke="White"
+                    StrokeThickness="3"
+                />
+
+            <Image
+                    Source="gs_scale.png"
+                    Grid.Column="3"
+                    Grid.Row="1"
+                    HorizontalOptions="End"
+                    Scale="0.25"
+                    TranslationX="9.5"
                  />
 
                 <Image
                     Source="gs_indicator.png"
-                    Grid.Column="4"
+                    Grid.Column="3"
                     Grid.Row="1"
-                    TranslationX="0.2"
+                    TranslationX="47"
                     TranslationY="{Binding VertDeviation}"
+                    Scale="0.15"
                  />
 
             <Image
@@ -82,7 +108,6 @@
                     TranslationX="{Binding TransX}"
                     TranslationY="{Binding TransY}"
                     Rotation="{Binding Course}"
-
                  />
 
 
@@ -93,15 +118,20 @@
                    Scale=" 1.06"
                  />
 
-                <Label
+
+            <Label
                     Text="{Binding VertDeviationDisp}"
                     TextColor="white"
                     Grid.Column="3"
                     Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    TranslationY="75"
+                    Grid.ColumnSpan="1"
+                    TranslationY="-97"
                     FontSize="Medium"
-                    HorizontalTextAlignment="End"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    TranslationX="47"
+                    
                     
                  />
 
@@ -109,7 +139,7 @@
                    Text="{Binding Status}"
                    Grid.Row="2"
                    Grid.Column="2"
-                   Grid.ColumnSpan="3"
+                   Grid.ColumnSpan="2"
                    FontSize="Large"
                    TextColor="{Binding StatusColor}"
                    VerticalOptions="CenterAndExpand"
@@ -128,7 +158,7 @@
                     Text="Next"
                     FontSize="10"    
                     Grid.Column="3"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="1"
                     BackgroundColor="DeepSkyBlue"
                     Command="{Binding Skip}"
                  />
@@ -141,7 +171,7 @@
                     Text="Fly To"
                     Grid.Row="3"
                     Grid.Column="3"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="1"
                     FontSize="Small" 
                  />
 
@@ -151,7 +181,7 @@
                     Padding="1"
                     Grid.Row="4"
                     Grid.Column="3"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="1"
                     BackgroundColor="Red"
                     Command="{Binding AbortNav}"
                     />

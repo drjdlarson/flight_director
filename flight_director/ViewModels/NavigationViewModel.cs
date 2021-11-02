@@ -289,11 +289,20 @@ namespace flight_director.ViewModels
 
         public int FeetperBar
         {
-            get => Preferences.Get(nameof(FeetperBar), 15);
+            get => Preferences.Get(nameof(FeetperBar), 600);
             set
             {
                 Preferences.Set(nameof(FeetperBar), value);
                 OnPropertyChanged(nameof(FeetperBar));
+            }
+        }
+        public int FeetperBarPrecise
+        {
+            get => Preferences.Get(nameof(FeetperBarPrecise), 100);
+            set
+            {
+                Preferences.Set(nameof(FeetperBarPrecise), value);
+                OnPropertyChanged(nameof(FeetperBarPrecise));
             }
         }
 
@@ -635,7 +644,7 @@ namespace flight_director.ViewModels
                     DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));
                     bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
                     DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track)) + DeviationOffset;
-                    Deviation = DeviationNum * (HorBarUnit / FeetperBar);
+                    Deviation = DeviationNum * (HorBarUnit / FeetperBarPrecise);
                     if (Abs(Deviation) > HorBarUnit * 3.2)
                     {
                         Deviation = Sign(Deviation) * HorBarUnit * 3.2;
