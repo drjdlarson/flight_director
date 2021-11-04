@@ -24,6 +24,9 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
 
             </Grid.RowDefinitions>
             
@@ -145,12 +148,42 @@
                 BackgroundColor="White"
                 />
 
+            <Label
+                Text="Simulated Plane x-offset (unit)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="8"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding PlaneXOffset, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="8"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
+            <Label
+                Text="Simulated Plane x-offset (unit)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="9"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding PlaneYOffset, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="9"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+
 
             <Label
                 Text="{Binding Version}"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="9"
+                Grid.Row="12"
                 />
             
         </Grid>

@@ -34,7 +34,9 @@
                     <ColumnDefinition Width="0.25*"/>
                     
             </Grid.ColumnDefinitions>
-                <Label 
+            
+
+            <Label 
                    Text="{Binding HeadingDisp}"
                    Grid.ColumnSpan="4"
                    TextColor="White"
@@ -48,10 +50,92 @@
                    x:Name="Compass"
                    Grid.ColumnSpan="4" 
                     Grid.Row="1"
-                   Rotation="{Binding HeadingComp}"
-                    Scale="0.98"
+                    Rotation="{Binding HeadingComp}"
+                    Scale="1.5"
+                    TranslationY="130"
                      
                 />
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="{Binding X_Start}"
+                Y1="{Binding Y_Start}"
+                X2="{Binding X_End}"
+                Y2="{Binding Y_End}"
+                Stroke="#00FFFF"
+                StrokeThickness="2"
+                    />
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="465"
+                Y1="605"
+                X2="590"
+                Y2="605"
+                Stroke="White"
+                StrokeThickness="2"
+                    />
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="465"
+                Y1="605"
+                X2="465"
+                Y2="590"
+                Stroke="White"
+                StrokeThickness="2"
+                    />
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="590"
+                Y1="605"
+                X2="590"
+                Y2="590"
+                Stroke="White"
+                StrokeThickness="2"
+                    />
+            <Label
+                Text="{Binding Ref_Scale_Disp}"
+                TextColor="White"
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="End"
+                TranslationY="-52"
+                />
+
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="{Binding X_Start}"
+                Y1="{Binding Y_Start}"
+                X2="{Binding X_Marker}"
+                Y2="{Binding Y_Marker}"
+                Stroke="Red"
+                StrokeThickness="5"
+                />
+
+            <Rectangle
+                    Fill="Black"
+                    Grid.ColumnSpan="4"
+                    Grid.Row="2"
+                Grid.RowSpan="3"
+                    WidthRequest="1000"
+                TranslationY="10"
+                TranslationX="-10"
+                    />
+            
             <Rectangle
                     Fill="#696969"
                     Grid.Row="1"
@@ -63,6 +147,20 @@
                     Stroke="White"
                     StrokeThickness="3"
                 />
+            <Rectangle
+                    Fill="#696969"
+                    Aspect="Fill"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Stroke="White"
+                    StrokeThickness="3"
+                    HeightRequest="50"
+                    WidthRequest="100"
+                    VerticalOptions="End"
+                    TranslationY="-10"
+                />
+
             <Rectangle
                     Fill="#696969"
                     Grid.Row="1"
@@ -93,30 +191,58 @@
                     TranslationY="{Binding VertDeviation}"
                     Scale="0.15"
                  />
+                
+            <Image
+                    Source="cdi_scale.png"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1"
+                    HorizontalOptions="Center"
+                    TranslationY="290"
+                    Scale="0.9"
+                    ScaleY="1.3"
+                    
+                 />
+            <Image
+                    Source="dev_ind.png"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1"
+                    TranslationX="{Binding Deviation}"
+                    TranslationY="-23"
+                    VerticalOptions="End"
+                    Scale="1.1"
+                 />
 
             <Image
                     Source="course_indicator.png"
                     Grid.Row="1"
                     Grid.ColumnSpan="4"
                     Rotation="{Binding Course}"
+                    Scale="1.4"
+                    TranslationY="130"
                  />
                 
-                <Image
-                    Source="deviation_bar.png"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="4"
-                    TranslationX="{Binding TransX}"
-                    TranslationY="{Binding TransY}"
-                    Rotation="{Binding Course}"
-                 />
 
 
                 <Image 
                    Source="simulated_plane.png"
                    Grid.Row="1"
                    Grid.ColumnSpan="4"
-                   Scale=" 1.06"
+                   Scale="1.06"
+                    ScaleY="1.04"
                  />
+            <Label
+                Text="{Binding CourseDes}"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="End"
+                TextColor="#FF00FF"
+                TranslationY="-60"
+                FontSize="40"
+                />
 
 
             <Label
@@ -131,8 +257,6 @@
                     HorizontalTextAlignment="Center"
                     VerticalTextAlignment="Center"
                     TranslationX="47"
-                    
-                    
                  />
 
                 <Label 
@@ -186,7 +310,34 @@
                     Command="{Binding AbortNav}"
                     />
 
-                <Entry 
+            <Button 
+                    Text="+"
+                    FontSize="Large"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    WidthRequest="60"
+                    HeightRequest="40"
+                    VerticalOptions="End"
+                    HorizontalOptions="End"
+                    BackgroundColor="DeepSkyBlue"
+                    Command="{Binding ZoomIn}"
+                    
+                    />
+            <Button 
+                    Text="-"
+                    FontSize="Large"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    WidthRequest="60"
+                    HeightRequest="40"
+                    VerticalOptions="End"
+                    HorizontalOptions="Start"
+                    BackgroundColor="DeepSkyBlue"
+                    Command="{Binding ZoomOut}"
+                    
+                    />
+
+            <Entry 
                     Grid.Column="2"
                     Grid.Row="3"
                     Grid.RowSpan="2"
