@@ -670,10 +670,12 @@ namespace flight_director.ViewModels
                     double angle_to_end_rad = Deg2Rad(Heading) - (double)CalcCourse_rad(CurrentLat, CurrentLon, cur_line.EndLat, cur_line.EndLon);
                     double temp_x = 0;
                     double temp_y = 0;
-                    X_Start = - dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset;
-                    Y_Start = - dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset;
-                    X_End = - dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset;
-                    Y_End = - dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset;
+                    double map_offset = DeviationOffset / MapScale;
+                    double deviation_offset_angle = trackcourse + PI / 2;
+                    X_Start = - dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
+                    Y_Start = - dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
+                    X_End = - dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
+                    Y_End = - dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
                     if (IsReversed == true)
                     {
                         temp_x = X_Start;
@@ -796,10 +798,12 @@ namespace flight_director.ViewModels
                     double angle_to_end_rad = Deg2Rad(Heading) - (double)CalcCourse_rad(CurrentLat, CurrentLon, cur_line.EndLat, cur_line.EndLon);
                     double temp_x = 0;
                     double temp_y = 0;
-                    X_Start = -dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset;
-                    Y_Start = -dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset;
-                    X_End = -dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset;
-                    Y_End = -dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset;
+                    double map_offset = DeviationOffset / MapScale;
+                    double deviation_offset_angle = trackcourse + PI / 2;
+                    X_Start = -dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
+                    Y_Start = -dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
+                    X_End = -dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
+                    Y_End = -dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
                     if (IsReversed == true)
                     {
                         temp_x = X_Start;
