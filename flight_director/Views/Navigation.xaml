@@ -137,7 +137,7 @@
                     />
             
             <Rectangle
-                    Fill="#696969"
+                    Fill="Black"
                     Grid.Row="1"
                     Grid.Column="3"
                     HeightRequest="150"
@@ -148,7 +148,7 @@
                     StrokeThickness="3"
                 />
             <Rectangle
-                    Fill="#696969"
+                    Fill="Black"
                     Aspect="Fill"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -162,7 +162,7 @@
                 />
 
             <Rectangle
-                    Fill="#696969"
+                    Fill="Black"
                     Grid.Row="1"
                     Grid.Column="3"
                     HeightRequest="50"

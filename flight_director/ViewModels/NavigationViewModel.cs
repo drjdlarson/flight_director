@@ -336,6 +336,14 @@ namespace flight_director.ViewModels
             set => SetProperty(ref ref_scale, value);
         }
 
+        // Variable to debug
+        private double debug = 0;
+        public double Debug
+        {
+            get => debug;
+            set => SetProperty(ref debug, value);
+        }
+
         private string ref_scale_disp = "NM";
         public string Ref_Scale_Disp
         {
@@ -346,7 +354,7 @@ namespace flight_director.ViewModels
         // General Settings
         public  int WPRadius
         {
-            get => Preferences.Get(nameof(WPRadius),500);
+            get => Preferences.Get(nameof(WPRadius),1000);
             set
             {
                 Preferences.Set(nameof(WPRadius), value);
@@ -365,7 +373,7 @@ namespace flight_director.ViewModels
         }
         public int FeetperBarPrecise
         {
-            get => Preferences.Get(nameof(FeetperBarPrecise), 100);
+            get => Preferences.Get(nameof(FeetperBarPrecise), 10);
             set
             {
                 Preferences.Set(nameof(FeetperBarPrecise), value);
@@ -375,7 +383,7 @@ namespace flight_director.ViewModels
 
         public double HorBarUnit
         {
-            get => Preferences.Get(nameof(HorBarUnit), 35.0);
+            get => Preferences.Get(nameof(HorBarUnit), 20.0);
             set
             {
                 Preferences.Set(nameof(HorBarUnit), value);
@@ -385,7 +393,7 @@ namespace flight_director.ViewModels
 
         public double VerBarUnit
         {
-            get => Preferences.Get(nameof(VerBarUnit), 35.0);
+            get => Preferences.Get(nameof(VerBarUnit), 30.0);
             set
             {
                 Preferences.Set(nameof(VerBarUnit), value);
@@ -395,7 +403,7 @@ namespace flight_director.ViewModels
 
         public int FeetperVertBar
         {
-            get => Preferences.Get(nameof(FeetperVertBar), 20);
+            get => Preferences.Get(nameof(FeetperVertBar), 200);
             set
             {
                 Preferences.Set(nameof(FeetperVertBar), value);
@@ -405,7 +413,7 @@ namespace flight_director.ViewModels
 
         public int HeadingThreshold
         {
-            get => Preferences.Get(nameof(HeadingThreshold), 10);
+            get => Preferences.Get(nameof(HeadingThreshold), 3);
             set
             {
                 Preferences.Set(nameof(HeadingThreshold), value);
@@ -415,7 +423,7 @@ namespace flight_director.ViewModels
 
         public int AntennaAngle
         {
-            get => Preferences.Get(nameof(AntennaAngle), 10);
+            get => Preferences.Get(nameof(AntennaAngle), 0);
             set
             {
                 Preferences.Set(nameof(AntennaAngle), value);
@@ -533,6 +541,7 @@ namespace flight_director.ViewModels
 
         async Task LineNavigate (string LineName)
         {
+            const int R_e = 3963 * 5280; //Earth radius in feet
             int LineNo = 0;
             if (LineName.EndsWith("*"))
             {
@@ -586,8 +595,13 @@ namespace flight_director.ViewModels
             TrackCourse = $"Crs: {(int)Rad2Deg(trackcourse)}";
             double bearing_cur_pos;
             CourseDes = (int)Rad2Deg(track_course);
-
-
+            // Calc offset lat lon with antenna deviation
+            DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
+            double lat_offset_angle = trackcourse + PI / 2;
+            double offset_lat = TargetLat + Rad2Deg(Cos(lat_offset_angle) * DeviationOffset / R_e);
+            double offset_lon = TargetLon + Rad2Deg(Sin(lat_offset_angle) * DeviationOffset / (R_e * Cos(Deg2Rad(TargetLat))));
+            TargetLat = offset_lat;
+            TargetLon = offset_lon;
             //Begin navigating in Flyto
             if (IsReversed == true)
             {
@@ -601,7 +615,7 @@ namespace flight_director.ViewModels
             double rem_ft = rem_miles * 5280;
             DistRem = (int)rem_ft;
             ButtonColor = "Red";
-            DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
+            
 
             // FlyTo Loop
             while (DistRem > WPRadius) //Check if beginning of first waypoint is reached
@@ -658,24 +672,25 @@ namespace flight_director.ViewModels
                     }
                     DistRem = (int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
                     bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
-                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track)) + DeviationOffset;
+                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track));
                     Deviation = DeviationNum * (HorBarUnit / FeetperBar);
                     if (Abs(Deviation) > HorBarUnit * 6.1)
                     {
                         Deviation = Sign(Deviation) * HorBarUnit * 6.1;
                     }
+
                     double dist_to_start_unit = ((5280 * Location.CalculateDistance(CurrentLat, CurrentLon, cur_line.StartLat, cur_line.StartLon, DistanceUnits.Miles))/MapScale);
                     double dist_to_end_unit = ((5280 * Location.CalculateDistance(CurrentLat, CurrentLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles))/MapScale);
                     double angle_to_start_rad = Deg2Rad(Heading) - (double)CalcCourse_rad(CurrentLat, CurrentLon, cur_line.StartLat, cur_line.StartLon);
                     double angle_to_end_rad = Deg2Rad(Heading) - (double)CalcCourse_rad(CurrentLat, CurrentLon, cur_line.EndLat, cur_line.EndLon);
                     double temp_x = 0;
                     double temp_y = 0;
-                    double map_offset = DeviationOffset / MapScale;
-                    double deviation_offset_angle = trackcourse + PI / 2;
-                    X_Start = - dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
-                    Y_Start = - dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
-                    X_End = - dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
-                    Y_End = - dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
+                    double map_offset = -DeviationOffset / MapScale;
+                    double deviation_offset_angle = Deg2Rad(Heading) - (trackcourse + PI / 2);
+                    X_Start = - dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Sin(deviation_offset_angle) * map_offset;
+                    Y_Start = - dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Cos(deviation_offset_angle) * map_offset;
+                    X_End = - dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Sin(deviation_offset_angle) * map_offset;
+                    Y_End = - dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Cos(deviation_offset_angle) * map_offset;
                     if (IsReversed == true)
                     {
                         temp_x = X_Start;
@@ -717,6 +732,12 @@ namespace flight_director.ViewModels
                 Status = $"Flying line {LineID}";
             }
             bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
+            // Calc offset lat lon with antenna deviation
+            DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
+            offset_lat = TargetLat + Rad2Deg(Cos(lat_offset_angle) * DeviationOffset / R_e);
+            offset_lon = TargetLon + Rad2Deg(Sin(lat_offset_angle) * DeviationOffset / (R_e * Cos(Deg2Rad(TargetLat))));
+            TargetLat = offset_lat;
+            TargetLon = offset_lon;
             //Recalculate remaining distance
             rem_miles = Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles);
             rem_ft = rem_miles * 5280;
@@ -786,7 +807,7 @@ namespace flight_director.ViewModels
                     }
                     DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));
                     bearing_cur_pos = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
-                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track)) + DeviationOffset;
+                    DeviationNum = (DistRem * Sin(bearing_cur_pos - bearing_track));
                     Deviation = DeviationNum * (HorBarUnit / FeetperBarPrecise);
                     if (Abs(Deviation) > HorBarUnit * 6.1)
                     {
@@ -798,12 +819,12 @@ namespace flight_director.ViewModels
                     double angle_to_end_rad = Deg2Rad(Heading) - (double)CalcCourse_rad(CurrentLat, CurrentLon, cur_line.EndLat, cur_line.EndLon);
                     double temp_x = 0;
                     double temp_y = 0;
-                    double map_offset = DeviationOffset / MapScale;
-                    double deviation_offset_angle = trackcourse + PI / 2;
-                    X_Start = -dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
-                    Y_Start = -dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
-                    X_End = -dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Cos(deviation_offset_angle) * map_offset;
-                    Y_End = -dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Sin(deviation_offset_angle) * map_offset;
+                    double map_offset = -DeviationOffset / MapScale;
+                    double deviation_offset_angle = Deg2Rad(Heading) - (trackcourse + PI / 2 );
+                    X_Start = -dist_to_start_unit * Sin(angle_to_start_rad) + PlaneXOffset + Sin(deviation_offset_angle) * map_offset;
+                    Y_Start = -dist_to_start_unit * Cos(angle_to_start_rad) + PlaneYOffset + Cos(deviation_offset_angle) * map_offset;
+                    X_End = -dist_to_end_unit * Sin(angle_to_end_rad) + PlaneXOffset + Sin(deviation_offset_angle) * map_offset;
+                    Y_End = -dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset + Cos(deviation_offset_angle) * map_offset;
                     if (IsReversed == true)
                     {
                         temp_x = X_Start;
