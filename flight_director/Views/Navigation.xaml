@@ -62,6 +62,21 @@
                 HorizontalOptions="FillAndExpand"
                 X1="{Binding X_Start}"
                 Y1="{Binding Y_Start}"
+                X2="{Binding PlaneXOffset}"
+                Y2="{Binding PlaneYOffset}"
+                Stroke="#FFFFFF"
+                Opacity="{Binding DashColor}"
+                StrokeThickness="1.5"
+                StrokeDashArray="7,5"
+                    />
+                
+            <Line
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                X1="{Binding X_Start}"
+                Y1="{Binding Y_Start}"
                 X2="{Binding X_End}"
                 Y2="{Binding Y_End}"
                 Stroke="#00FFFF"

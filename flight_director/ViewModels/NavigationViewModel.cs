@@ -255,6 +255,13 @@ namespace flight_director.ViewModels
             set => SetProperty(ref acc, value);
         }
 
+        private int dashcolor = 0;
+        public int DashColor
+        {
+            get => dashcolor;
+            set => SetProperty(ref dashcolor, value);
+        }
+
         private double vertdeviationnum = 0;
         public double VertDeviationNum
         {
@@ -615,6 +622,7 @@ namespace flight_director.ViewModels
             double rem_ft = rem_miles * 5280;
             DistRem = (int)rem_ft;
             ButtonColor = "Red";
+            DashColor = 100;
             
 
             // FlyTo Loop
@@ -645,6 +653,7 @@ namespace flight_director.ViewModels
                     CourseDes = 0;
                     X_Marker = 0;
                     Y_Marker = 0;
+                    DashColor = 0;
                     return;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
@@ -708,6 +717,7 @@ namespace flight_director.ViewModels
                     DeviationDisp = $"Dev: {Abs((int)DeviationNum)} ft";
                     DistRemDisp = $"Dst Rem: {DistRem} ft";
                     AccDisp = $"Acc: {Acc} ft";
+                    
                 }
                 await Task.Delay(15);
 
@@ -745,6 +755,7 @@ namespace flight_director.ViewModels
             // Update status to Navigate mode (follow the refeence trajectory)
             ButtonColor = "Green";
             CourseDes = (int)Rad2Deg(trackcourse);
+            DashColor = 0;
 
             //Line Navigating loop
             while (DistRem > WPRadius) //Check if beginning of first waypoint is reached
@@ -867,6 +878,7 @@ namespace flight_director.ViewModels
             CourseDes = 0;
             X_Marker = 0;
             Y_Marker = 0;
+            DashColor = 0;
         }
 
         async Task Navigate()
