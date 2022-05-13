@@ -40,7 +40,7 @@
                    Text="{Binding HeadingDisp}"
                    Grid.ColumnSpan="4"
                    TextColor="White"
-                   FontSize="15"
+                   FontSize="25"
                    FontAttributes="Bold"
                    HorizontalOptions="CenterAndExpand"
                  />
@@ -51,10 +51,11 @@
                    Grid.ColumnSpan="4" 
                     Grid.Row="1"
                     Rotation="{Binding HeadingComp}"
-                    Scale="1.5"
+                    Scale="1.3"
                     TranslationY="130"
                      
                 />
+
             <Line
                 Grid.Row="1"
                 Grid.ColumnSpan="4"
@@ -87,10 +88,10 @@
                 Grid.ColumnSpan="4"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                X1="465"
-                Y1="605"
-                X2="590"
-                Y2="605"
+                X1="570"
+                Y1="745"
+                X2="750"
+                Y2="745"
                 Stroke="White"
                 StrokeThickness="2"
                     />
@@ -99,10 +100,10 @@
                 Grid.ColumnSpan="4"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                X1="465"
-                Y1="605"
-                X2="465"
-                Y2="590"
+                X1="570"
+                Y1="720"
+                X2="570"
+                Y2="745"
                 Stroke="White"
                 StrokeThickness="2"
                     />
@@ -111,10 +112,10 @@
                 Grid.ColumnSpan="4"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                X1="590"
-                Y1="605"
-                X2="590"
-                Y2="590"
+                X1="750"
+                Y1="745"
+                X2="750"
+                Y2="720"
                 Stroke="White"
                 StrokeThickness="2"
                     />
@@ -126,6 +127,7 @@
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="End"
                 TranslationY="-52"
+                FontSize="Large"
                 />
 
             <Line
@@ -189,31 +191,14 @@
                     StrokeThickness="3"
                 />
 
-            <Image
-                    Source="gs_scale.png"
-                    Grid.Column="3"
-                    Grid.Row="1"
-                    HorizontalOptions="End"
-                    Scale="0.25"
-                    TranslationX="9.5"
-                 />
 
-                <Image
-                    Source="gs_indicator.png"
-                    Grid.Column="3"
-                    Grid.Row="1"
-                    TranslationX="47"
-                    TranslationY="{Binding VertDeviation}"
-                    Scale="0.15"
-                 />
-                
             <Image
                     Source="cdi_scale.png"
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Grid.Row="1"
                     HorizontalOptions="Center"
-                    TranslationY="290"
+                    TranslationY="358"
                     Scale="0.9"
                     ScaleY="1.3"
                     
@@ -224,7 +209,7 @@
                     Grid.ColumnSpan="2"
                     Grid.Row="1"
                     TranslationX="{Binding Deviation}"
-                    TranslationY="-23"
+                    TranslationY="-18"
                     VerticalOptions="End"
                     Scale="1.1"
                  />
@@ -234,48 +219,24 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="4"
                     Rotation="{Binding Course}"
-                    Scale="1.4"
+                    Scale="1.3"
                     TranslationY="130"
                  />
-                
 
 
-                <Image 
+
+            <Image 
                    Source="simulated_plane.png"
                    Grid.Row="1"
                    Grid.ColumnSpan="4"
-                   Scale="1.06"
+                   Scale="0.97"
                     ScaleY="1.04"
                  />
-            <Label
-                Text="{Binding CourseDes}"
-                Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="End"
-                TextColor="#FF00FF"
-                TranslationY="-60"
-                FontSize="40"
-                />
 
 
-            <Label
-                    Text="{Binding VertDeviationDisp}"
-                    TextColor="white"
-                    Grid.Column="3"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="1"
-                    TranslationY="-97"
-                    FontSize="Medium"
-                    HorizontalOptions="Center"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    TranslationX="47"
-                 />
 
                 <Label 
-                   Text="{Binding Status}"
+                   Text="{Binding Status_Text}"
                    Grid.Row="2"
                    Grid.Column="2"
                    Grid.ColumnSpan="2"
@@ -283,7 +244,7 @@
                    TextColor="{Binding StatusColor}"
                    VerticalOptions="CenterAndExpand"
                    HorizontalTextAlignment="Center"
-                   BackgroundColor="{Binding ButtonColor}"
+                   BackgroundColor="{Binding Status_Back_Color}"
                  />
 
                 <Button 
@@ -330,7 +291,7 @@
                     FontSize="Large"
                     Grid.Row="1"
                     Grid.Column="3"
-                    WidthRequest="60"
+                    WidthRequest="85"
                     HeightRequest="40"
                     VerticalOptions="End"
                     HorizontalOptions="End"
@@ -343,7 +304,7 @@
                     FontSize="Large"
                     Grid.Row="1"
                     Grid.Column="3"
-                    WidthRequest="60"
+                    WidthRequest="85"
                     HeightRequest="40"
                     VerticalOptions="End"
                     HorizontalOptions="Start"
@@ -369,7 +330,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     TextColor="White"
-                    FontSize="Large"
+                    FontSize="35"
                     VerticalOptions="Center"
                 />
 
@@ -379,7 +340,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     TextColor="White"
-                    FontSize="Large"
+                    FontSize="35"
                     VerticalOptions="Center"
                 />
 
@@ -389,7 +350,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     TextColor="White"
-                    FontSize="Large"
+                    FontSize="35"
                     VerticalOptions="Center"
                 />
                 
@@ -398,7 +359,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     TextColor="White"
-                    FontSize="Large"
+                    FontSize="35"
                     VerticalTextAlignment="End"
                 />
 

@@ -164,7 +164,7 @@
                 />
 
             <Label
-                Text="Simulated Plane x-offset (unit)"
+                Text="Simulated Plane y-offset (unit)"
                 TextColor="White"
                 FontSize="Medium"
                 Grid.Row="9"

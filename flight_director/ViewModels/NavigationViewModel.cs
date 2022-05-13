@@ -94,11 +94,11 @@ namespace flight_director.ViewModels
             set => SetProperty(ref lineid, value);
         }
 
-        private string status = "Stand By";
-        public string Status
+        private string status_text = "Stand By";
+        public string Status_Text
         {
-            get => status;
-            set => SetProperty(ref status, value);
+            get => status_text;
+            set => SetProperty(ref status_text, value);
         }
 
         private string statuscolor = "White";
@@ -108,11 +108,11 @@ namespace flight_director.ViewModels
             set => SetProperty(ref statuscolor, value);
         }
 
-        private string buttoncolor = "Gray";
-        public string ButtonColor
+        private string status_back_color = "Gray";
+        public string Status_Back_Color
         {
-            get => buttoncolor;
-            set => SetProperty(ref buttoncolor, value);
+            get => status_back_color;
+            set => SetProperty(ref status_back_color, value);
         }
 
         private string lineseq = "";
@@ -234,11 +234,11 @@ namespace flight_director.ViewModels
             set => SetProperty(ref transy, value);
         }
 
-        private string trackcourse = "Crs";
-        public string TrackCourse
+        private string leg_groundcourse_text = "Crs";
+        public string Leg_GroundCourse_Text
         {
-            get => trackcourse;
-            set => SetProperty(ref trackcourse, value);
+            get => leg_groundcourse_text;
+            set => SetProperty(ref leg_groundcourse_text, value);
         }
 
         private string accdisp = "Acc:";
@@ -309,17 +309,17 @@ namespace flight_director.ViewModels
             set => SetProperty(ref y_end, value);
         }
 
-        private double x_marker = 0;
-        public double X_Marker
+        private double x_leadin = 0;
+        public double X_Leadin
         {
-            get => x_marker;
-            set => SetProperty(ref x_marker, value);
+            get => x_leadin;
+            set => SetProperty(ref x_leadin, value);
         }
-        private double y_marker = 0;
-        public double Y_Marker
+        private double y_leadin = 0;
+        public double Y_Leadin
         {
-            get => y_marker;
-            set => SetProperty(ref y_marker, value);
+            get => y_leadin;
+            set => SetProperty(ref y_leadin, value);
         }
 
         private int coursedes = 0;
@@ -341,6 +341,20 @@ namespace flight_director.ViewModels
         {
             get => ref_scale;
             set => SetProperty(ref ref_scale, value);
+        }
+
+        private bool isreversed = false;
+        public bool IsReversed
+        {
+            get => isreversed;
+            set => SetProperty(ref isreversed, value);
+        }
+
+        private bool is_sequence = false;
+        public bool Is_Sequenced
+        {
+            get => is_sequence;
+            set => SetProperty(ref is_sequence, value);
         }
 
         // Variable to debug
@@ -455,15 +469,17 @@ namespace flight_director.ViewModels
                 OnPropertyChanged(nameof(PlaneYOffset));
             }
         }
-        public bool IsReversed
+
+        public int LeadIn
         {
-            get => Preferences.Get(nameof(IsReversed), false);
+            get => Preferences.Get(nameof(LeadIn), 0);
             set
             {
-                Preferences.Set(nameof(IsReversed), value);
-                OnPropertyChanged(nameof(IsReversed));
+                Preferences.Set(nameof(LeadIn), value);
+                OnPropertyChanged(nameof(LeadIn));
             }
         }
+
 
         // Some functions
         public double Rad2Deg(double rad)
@@ -476,16 +492,36 @@ namespace flight_director.ViewModels
             return deg * Math.PI / 180;
         }
 
-        public double CalcCourse_rad(double startlat, double startlon, double endlat, double endlon)
+        public double CalcCourse_rad(double start_lat_deg, double start_lon_deg, double end_lat_deg, double end_lon_deg)
         {
-            double dL = Deg2Rad(endlon - startlon);
-            double x = Sin(dL) * Cos(Deg2Rad(endlat));
-            double y = Cos(Deg2Rad(startlat)) * Sin(Deg2Rad(endlat)) - Sin(Deg2Rad(startlat)) * Cos(Deg2Rad(endlat)) * Cos(dL);
+            double dL = Deg2Rad(end_lon_deg - start_lon_deg);
+            double x = Sin(dL) * Cos(Deg2Rad(end_lat_deg));
+            double y = Cos(Deg2Rad(start_lat_deg)) * Sin(Deg2Rad(end_lat_deg)) - Sin(Deg2Rad(start_lat_deg)) * Cos(Deg2Rad(end_lat_deg)) * Cos(dL);
             double bearing_rad = Atan2(x, y);
-            double bearing_deg = Rad2Deg(bearing_rad);
-            return Deg2Rad((bearing_deg + 360) % 360);
+            return wrapTo2pi(bearing_rad);
 
         }
+
+        public double wrapTo2pi (double angle_rad)
+        {
+            return (angle_rad + 2 * PI) % (2 * PI);
+        }
+
+        public double translate_lat_rad (double start_lat_deg, double translate_dist_ft, double translate_dir_rad, double R_E)
+        {
+            double angular_dist_rad = translate_dist_ft / R_E;
+            double start_lat_rad = Deg2Rad(start_lat_deg);
+            return Asin( Sin(start_lat_rad) * Cos (angular_dist_rad) + Cos(start_lat_rad) * Sin(angular_dist_rad) * Cos(translate_dir_rad));
+        }
+        public double translate_lon_rad(double start_lat_deg, double start_lon_deg, double end_lat_deg, double translate_dist_ft, double translate_dir_rad, double R_E)
+        {
+            double angular_dist_rad = translate_dist_ft / R_E;
+            double start_lat_rad = Deg2Rad(start_lat_deg);
+            double end_lat_rad = Deg2Rad(end_lat_deg);
+            double start_lon_rad = Deg2Rad(start_lon_deg);
+            return start_lon_rad + Atan2(Sin(translate_dir_rad) * Sin(angular_dist_rad) * Cos(start_lat_rad), Cos(angular_dist_rad) - Sin(start_lat_rad) * Sin(end_lat_rad));
+        }
+
 
 
         public NavigationViewModel()
@@ -549,11 +585,13 @@ namespace flight_director.ViewModels
         async Task LineNavigate (string LineName)
         {
             const int R_e = 3963 * 5280; //Earth radius in feet
+
+            // Get Line Number and check reverse command
             int LineNo = 0;
             if (LineName.EndsWith("*"))
             {
                 IsReversed = true;
-                LineNo = Int16.Parse(LineName.TrimEnd('*'));
+                 LineNo = Int16.Parse(LineName.TrimEnd('*'));
             }
             else
             { 
@@ -561,67 +599,85 @@ namespace flight_director.ViewModels
                IsReversed = false;
 
             } 
+
+            // Test GPS 
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(1));
             var cur_pos = await Geolocation.GetLocationAsync(request);
             if (cur_pos == null)
             {
-                Status = "No GPS";
+                Status_Text = "No GPS";
                 StatusColor = "Red";
                 EnableFlyTo = true;
                 return;
             }
-            CurrentLat = cur_pos.Latitude;
-            CurrentLon = cur_pos.Longitude;
+
+            // Get current line params
             var cur_line = await FlightLineService.GetLine(LineNo);
             if (cur_line == null) //Check if the entered line is valid (id < total number of line in database)
             {
-                Status = "Invalid Line";
+                Status_Text = "Invalid Line";
                 StatusColor = "Red";
                 EnableFlyTo = true;
                 return;
             }
-            LineID = cur_line.ID;
-            TargetLat = cur_line.StartLat;
-            TargetLon = cur_line.StartLon;
-            TargetAlt = cur_line.StartAlt;
-            double trackcourse = CalcCourse_rad(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon);
-            double alt_dif = cur_line.StartAlt - cur_line.EndAlt;
+            
+            // Calculate leg ground course depending on direction
+            double target_groundcourse_rad = CalcCourse_rad(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon);
+            double Start_Lat_deg = cur_line.StartLat;
+            double Start_Lon_deg = cur_line.StartLon;
+            double End_Lat_deg = cur_line.EndLat;
+            double End_Lon_deg = cur_line.EndLon;
+            double avg_alt = (cur_line.StartAlt + cur_line.EndAlt) / 2;
+
             if (IsReversed == true)
             {
-                TargetLat = cur_line.EndLat;
-                TargetLon = cur_line.EndLon;
-                TargetAlt = cur_line.EndAlt;
-                trackcourse = CalcCourse_rad(cur_line.EndLat, cur_line.EndLon, cur_line.StartLat, cur_line.StartLon);
-                alt_dif = cur_line.EndAlt - cur_line.StartAlt;
+                target_groundcourse_rad = CalcCourse_rad(cur_line.EndLat, cur_line.EndLon, cur_line.StartLat, cur_line.StartLon);
+                Start_Lat_deg = cur_line.EndLat;
+                Start_Lon_deg = cur_line.EndLon;
+                End_Lat_deg = cur_line.StartLat;
+                End_Lon_deg = cur_line.StartLon;
             }
 
-            double track_course = CalcCourse_rad(CurrentLat, CurrentLon, TargetLat, TargetLon);
-            double bearing_track = CalcCourse_rad(TargetLat, TargetLon, CurrentLat, CurrentLon);
-            double line_length = 5280 * Location.CalculateDistance(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
-            double gs_angle = Atan2(alt_dif, line_length);
-            TrackCourse = $"Crs: {(int)Rad2Deg(trackcourse)}";
+            // Convert start coordinates to radian 
+            double Start_Lat_rad = Deg2Rad(Start_Lat_deg);
+            double Start_Lon_rad = Deg2Rad(Start_Lon_deg);
+            double End_Lat_rad = Deg2Rad(End_Lat_deg);
+            double End_Lon_rad = Deg2Rad(End_Lon_deg);
+
+            // Calculate length of line (Is this neccesary)
+            double line_length_mile = 5280 * Location.CalculateDistance(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
+
+
+            Leg_GroundCourse_Text = $"Crs: {(int)Rad2Deg(target_groundcourse_rad)}";
             double bearing_cur_pos;
-            CourseDes = (int)Rad2Deg(track_course);
             // Calc offset lat lon with antenna deviation
-            DeviationOffset = (double)(TargetAlt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
-            double lat_offset_angle = trackcourse + PI / 2;
-            double offset_lat = TargetLat + Rad2Deg(Cos(lat_offset_angle) * DeviationOffset / R_e);
-            double offset_lon = TargetLon + Rad2Deg(Sin(lat_offset_angle) * DeviationOffset / (R_e * Cos(Deg2Rad(TargetLat))));
-            TargetLat = offset_lat;
-            TargetLon = offset_lon;
+            double antenna_offset_dist_ft = (double)(avg_alt - cur_line.AvgEle) * Tan(Deg2Rad(AntennaAngle));       //Left offset is negative
+            double offset_dir_rad = wrapTo2pi(target_groundcourse_rad + PI / 2);
+
+            double offset_start_lat_rad = translate_lat_rad(Start_Lat_deg, antenna_offset_dist_ft, offset_dir_rad, R_e);
+            double offset_start_lon_rad = translate_lon_rad(Start_Lat_deg, Start_Lon_deg, Rad2Deg(offset_start_lat_rad), antenna_offset_dist_ft, offset_dir_rad, R_e);
+            double offset_end_lat_rad = translate_lat_rad(End_Lat_deg, antenna_offset_dist_ft, offset_dir_rad, R_e);
+            double offset_end_lon_rad = translate_lon_rad(End_Lat_deg, End_Lon_deg, Rad2Deg(offset_end_lat_rad), antenna_offset_dist_ft, offset_dir_rad, R_e);
+
+            // Leadin coordinates calculation
+            double leading_dir_rad = wrapTo2pi(target_groundcourse_rad + PI);
+
+            double leadin_start_lat_rad = translate_lat_rad(Start_Lat_deg, LeadIn, leading_dir_rad, R_e);
+            double leadin_start_lon_rad = translate_lon_rad(Start_Lat_deg, Start_Lon_deg, Rad2Deg(leadin_start_lat_rad), LeadIn, leading_dir_rad, R_e);
+
             //Begin navigating in Flyto
             if (IsReversed == true)
             {
-                Status = $"Flying to line {LineID}*";
+                Status_Text = $"Flying to line {cur_line.ID}*";
             }
             else
             {
-                Status = $"Flying to line {LineID}";
+                Status_Text = $"Flying to line {cur_line.ID}";
             }
-            double rem_miles = Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles);
+            double rem_miles = Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, Start_Lat_deg, Start_Lon_deg, DistanceUnits.Miles);
             double rem_ft = rem_miles * 5280;
             DistRem = (int)rem_ft;
-            ButtonColor = "Red";
+            Status_Back_Color = "Red";
             DashColor = 100;
             
 
@@ -631,17 +687,15 @@ namespace flight_director.ViewModels
                 if (AbortCur == true)
                 {
                     EnableFlyTo = true;
-                    ButtonColor = "Gray";
-                    Status = "Stand By";
+                    Status_Back_Color = "Gray";
+                    Status_Text = "Stand By";
                     HeadingComp = 0;
                     HeadingDisp = 0;
                     DeviationDisp = "Dev: ";
                     Deviation = 0;
-                    VertDeviationDisp = 0;
-                    VertDeviation = 0;
                     AccDisp = "Acc:";
                     DistRemDisp = "Dst Rem:";
-                    TrackCourse = "Crs: ";
+                    Leg_GroundCourse_Text = "Crs: ";
                     Course = 0;
                     TransX = 0;
                     TransY = 0;
@@ -651,10 +705,10 @@ namespace flight_director.ViewModels
                     X_End = 0;
                     Y_End = 0;
                     CourseDes = 0;
-                    X_Marker = 0;
-                    Y_Marker = 0;
+                    X_Leadin = 0;
+                    Y_Leadin = 0;
                     DashColor = 0;
-                    return;
+                    break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
                 if (cur_pos != null && cur_pos.Accuracy < 30)
@@ -763,17 +817,15 @@ namespace flight_director.ViewModels
                 if (AbortCur == true)
                 {
                     EnableFlyTo = true;
-                    ButtonColor = "Gray";
-                    Status = "Stand By";
+                    Status_Back_Color = "Gray";
+                    Status_Text = "Stand By";
                     HeadingComp = 0;
                     HeadingDisp = 0;
                     DeviationDisp = "Dev: ";
                     Deviation = 0;
-                    VertDeviationDisp = 0;
-                    VertDeviation = 0;
                     AccDisp = "Acc:";
                     DistRemDisp = "Dst Rem:";
-                    TrackCourse = "Crs: ";
+                    Leg_GroundCourse_Text = "Crs: ";
                     Course = 0;
                     TransX = 0;
                     TransY = 0;
@@ -783,9 +835,10 @@ namespace flight_director.ViewModels
                     X_End = 0;
                     Y_End = 0;
                     CourseDes = 0;
-                    X_Marker = 0;
-                    Y_Marker = 0;
-                    return;
+                    X_Leadin = 0;
+                    Y_Leadin = 0;
+                    DashColor = 0;
+                    break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
                 if (cur_pos != null && cur_pos.Accuracy < 30)
@@ -859,6 +912,10 @@ namespace flight_director.ViewModels
             }
             //Finish navigating
             EnableFlyTo = true;
+            if (Is_Sequenced == true)
+            {
+                EnableFlyTo = false;
+            }
             ButtonColor = "Gray";
             Status = "Stand By";
             HeadingComp = 0;
@@ -894,6 +951,7 @@ namespace flight_director.ViewModels
 
             //Parse selected line info
             var line_seq = LineSeq.Split(',');
+            Is_Sequenced = line_seq.Length > 1;
             for (int i = 0; i < line_seq.Length; i++)
             {
                 
