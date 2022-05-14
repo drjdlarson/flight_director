@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Xamarin.Essentials;
-using SQLite;
-using SQLitePCL;
-using flight_director.ViewModels;
-using flight_director.Models;
 using flight_director.Services;
 using Xamarin.Forms;
 using static System.Math;
@@ -39,14 +31,6 @@ namespace flight_director.ViewModels
             set => SetProperty(ref enableflyto, value);
         }
 
-        // Not sure
-        private double deviationoffset = 0;
-        public double DeviationOffset
-        {
-            get => deviationoffset;
-            set => SetProperty(ref deviationoffset, value);
-        }
-
         // Abort all line flag
         private bool abortall = false;
         public bool AbortAll
@@ -71,7 +55,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref prevline, value);
         }
 
-        // Need checking
+        // Current aircraft ground track
         private double heading = 0;
         public double Heading
         {
@@ -79,7 +63,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref heading, value);
         }
 
-        // Compass card rotation
+        // Compass card rotation ( = - Heading). Need to be included since can't bind to negative variable
         private double headingcomp = 0;
         public double HeadingComp
         {
@@ -94,14 +78,6 @@ namespace flight_director.ViewModels
             get => headingdisp;
             set => SetProperty(ref headingdisp, value);
         }
-        
-        // Need checking
-        private int lineid = 0;
-        public int LineID
-        {
-            get => lineid;
-            set => SetProperty(ref lineid, value);
-        }
 
         // Status text
         private string status_text = "Stand By";
@@ -111,6 +87,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref status_text, value);
         }
 
+        // Status text font color
         private string statuscolor = "White";
         public string StatusColor
         {
@@ -118,6 +95,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref statuscolor, value);
         }
 
+        // Status button background color
         private string status_back_color = "Gray";
         public string Status_Back_Color
         {
@@ -125,6 +103,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref status_back_color, value);
         }
 
+        // Line sequence input text box
         private string lineseq = "";
         public string LineSeq
         {
@@ -132,13 +111,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref lineseq, value);
         }
 
-        private int distrem = 0;
-        public int DistRem
-        {
-            get => distrem;
-            set => SetProperty(ref distrem, value);
-        }
-
+        // Distance remaining text 
         private string distremdisp = "Dst Rem: ";
         public string DistRemDisp
         {
@@ -146,13 +119,15 @@ namespace flight_director.ViewModels
             set => SetProperty(ref distremdisp, value);
         }
 
-        private double course = 0;
-        public double Course
+        // Heading bug on compas card to show which direction to turn
+        private double course_bug = 0;
+        public double Course_Bug
         {
-            get => course;
-            set => SetProperty(ref course, value);
+            get => course_bug;
+            set => SetProperty(ref course_bug, value);
         }
 
+        // Current Lat - keep maybe for future use
         private double currentlat = 0;
         public double CurrentLat
         {
@@ -160,6 +135,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref currentlat, value);
         }
 
+        // Current Lon - keep maybe for future use
         private double currentlon = 0;
         public double CurrentLon
         {
@@ -167,6 +143,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref currentlon, value);
         }
 
+        // Numerical reading of altitude
         private double currentalt = 0;
         public double CurrentAlt
         {
@@ -174,41 +151,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref currentalt, value);
         }
 
-        private double prevlat = 0;
-        public double PrevLat
-        {
-            get => prevlat;
-            set => SetProperty(ref prevlat, value);
-        }
-
-        private double prevlon = 0;
-        public double PrevLon
-        {
-            get => prevlon;
-            set => SetProperty(ref prevlon, value);
-        }
-
-        private double targetlat = 0;
-        public double TargetLat
-        {
-            get => targetlat;
-            set => SetProperty(ref targetlat, value);
-        }
-
-        private double targetlon = 0;
-        public double TargetLon
-        {
-            get => targetlon;
-            set => SetProperty(ref targetlon, value);
-        }
-
-        private double targetalt = 0;
-        public double TargetAlt
-        {
-            get => targetalt;
-            set => SetProperty(ref targetalt, value);
-        }
-
+        // Deviation tick movement distance
         private double deviation = 0;
         public double Deviation
         {
@@ -216,13 +159,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref deviation, value);
         }
 
-        private double deviationnum = 0;
-        public double DeviationNum
-        {
-            get => deviationnum;
-            set => SetProperty(ref deviationnum, value);
-        }
-
+        // Deviation text
         private string deviationdisp = "Dev:";
         public string DeviationDisp
         {
@@ -230,20 +167,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref deviationdisp, value);
         }
 
-        private double transx = 0;
-        public double TransX
-        {
-            get => transx;
-            set => SetProperty(ref transx, value);
-        }
-
-        private double transy = 0;
-        public double TransY
-        {
-            get => transy;
-            set => SetProperty(ref transy, value);
-        }
-
+        // Leg course text
         private string leg_groundcourse_text = "Crs";
         public string Leg_GroundCourse_Text
         {
@@ -251,18 +175,12 @@ namespace flight_director.ViewModels
             set => SetProperty(ref leg_groundcourse_text, value);
         }
 
+        // GPS accuracy text
         private string accdisp = "Acc:";
         public string AccDisp
         {
             get => accdisp;
             set => SetProperty(ref accdisp, value);
-        }
-
-        private int acc=0;
-        public int Acc
-        {
-            get => acc;
-            set => SetProperty(ref acc, value);
         }
 
         //transparency of dashed line (from current to leadin)
@@ -281,27 +199,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref leadincolor, value);
         }
 
-        private double vertdeviationnum = 0;
-        public double VertDeviationNum
-        {
-            get => vertdeviationnum;
-            set => SetProperty(ref vertdeviationnum, value);
-        }
-
-        private int vertdeviationdisp = 0;
-        public int VertDeviationDisp
-        {
-            get => vertdeviationdisp;
-            set => SetProperty(ref vertdeviationdisp, value);
-        }
-
-        private double vertdeviation = 0;
-        public double VertDeviation
-        {
-            get => vertdeviation;
-            set => SetProperty(ref vertdeviation, value);
-        }
-
+        // X location on screen of line start point
         private double x_start = 0;
         public double X_Start
         {
@@ -309,18 +207,23 @@ namespace flight_director.ViewModels
             set => SetProperty(ref x_start, value);
         }
 
+        // Y location on screen of line start point
         private double y_start = 0;
         public double Y_Start
         {
             get => y_start;
             set => SetProperty(ref y_start, value);
         }
+
+        // X location on screen of line end point
         private double x_end = 0;
         public double X_End
         {
             get => x_end;
             set => SetProperty(ref x_end, value);
         }
+
+        // Y location on screen of line end point
         private double y_end = 0;
         public double Y_End
         {
@@ -328,12 +231,15 @@ namespace flight_director.ViewModels
             set => SetProperty(ref y_end, value);
         }
 
+        // X location on screen of leadin point
         private double x_leadin = 0;
         public double X_Leadin
         {
             get => x_leadin;
             set => SetProperty(ref x_leadin, value);
         }
+
+        // Y location on screen of leadin point
         private double y_leadin = 0;
         public double Y_Leadin
         {
@@ -341,13 +247,7 @@ namespace flight_director.ViewModels
             set => SetProperty(ref y_leadin, value);
         }
 
-        private int coursedes = 0;
-        public int CourseDes
-        {
-            get => coursedes;
-            set => SetProperty(ref coursedes, value);
-        }
-
+        // Current Map scaling factor
         private double mapscale = 20;
         public double MapScale
         {
@@ -355,13 +255,38 @@ namespace flight_director.ViewModels
             set => SetProperty(ref mapscale, value);
         }
 
-        private double ref_scale = 125 / (10);
-        public double Ref_Scale
+        // Dist of first reference mark
+        private double ref_scale_1 = 125 / (20);
+        public double Ref_Scale_1
         {
-            get => ref_scale;
-            set => SetProperty(ref ref_scale, value);
+            get => ref_scale_1;
+            set => SetProperty(ref ref_scale_1, value);
         }
 
+        private string ref_scale_1_disp = "NM";
+        public string Ref_Scale_1_Disp
+        {
+            get => ref_scale_1_disp;
+            set => SetProperty(ref ref_scale_1_disp, value);
+        }
+
+        // Dist of second reference mark
+        private double ref_scale_2 = 250 / (20);
+        public double Ref_Scale_2
+        {
+            get => ref_scale_2;
+            set => SetProperty(ref ref_scale_2, value);
+        }
+
+        private string ref_scale_2_disp = "NM";
+        public string Ref_Scale_2_Disp
+        {
+            get => ref_scale_2_disp;
+            set => SetProperty(ref ref_scale_1_disp, value);
+        }
+
+
+        // Reversed flag
         private bool isreversed = false;
         public bool IsReversed
         {
@@ -369,8 +294,9 @@ namespace flight_director.ViewModels
             set => SetProperty(ref isreversed, value);
         }
 
+        // Sequence flag
         private bool is_sequence = false;
-        public bool Is_Sequenced
+        public bool Is_Sequence
         {
             get => is_sequence;
             set => SetProperty(ref is_sequence, value);
@@ -384,14 +310,10 @@ namespace flight_director.ViewModels
             set => SetProperty(ref debug, value);
         }
 
-        private string ref_scale_disp = "NM";
-        public string Ref_Scale_Disp
-        {
-            get => ref_scale_disp;
-            set => SetProperty(ref ref_scale_disp, value);
-        }
 
         // General Settings
+
+        // WP radiius - how close too switch wp
         public  int WPRadius
         {
             get => Preferences.Get(nameof(WPRadius),1000);
@@ -402,6 +324,7 @@ namespace flight_director.ViewModels
             }
         }
 
+        // Deviation distance per horizontal tick for flyto
         public int FeetperBar
         {
             get => Preferences.Get(nameof(FeetperBar), 600);
@@ -411,6 +334,8 @@ namespace flight_director.ViewModels
                 OnPropertyChanged(nameof(FeetperBar));
             }
         }
+
+        // Deviation distance per horizontal tick for precise line navigation
         public int FeetperBarPrecise
         {
             get => Preferences.Get(nameof(FeetperBarPrecise), 10);
@@ -421,6 +346,7 @@ namespace flight_director.ViewModels
             }
         }
 
+        // Distance on screen between horizontal ticks
         public double HorBarUnit
         {
             get => Preferences.Get(nameof(HorBarUnit), 20.0);
@@ -431,26 +357,7 @@ namespace flight_director.ViewModels
             }
         }
 
-        public double VerBarUnit
-        {
-            get => Preferences.Get(nameof(VerBarUnit), 30.0);
-            set
-            {
-                Preferences.Set(nameof(VerBarUnit), value);
-                OnPropertyChanged(nameof(VerBarUnit));
-            }
-        }
-
-        public int FeetperVertBar
-        {
-            get => Preferences.Get(nameof(FeetperVertBar), 200);
-            set
-            {
-                Preferences.Set(nameof(FeetperVertBar), value);
-                OnPropertyChanged(nameof(FeetperVertBar));
-            }
-        }
-
+        // Threshold for calculating heading
         public int HeadingThreshold
         {
             get => Preferences.Get(nameof(HeadingThreshold), 3);
@@ -461,6 +368,7 @@ namespace flight_director.ViewModels
             }
         }
 
+        // Antenna angle for lateral offset calculation
         public int AntennaAngle
         {
             get => Preferences.Get(nameof(AntennaAngle), 0);
@@ -470,6 +378,8 @@ namespace flight_director.ViewModels
                 OnPropertyChanged(nameof(AntennaAngle));
             }
         }
+
+        // Screen X location of simulated plane
         public int PlaneXOffset
         {
             get => Preferences.Get(nameof(PlaneXOffset), 300);
@@ -479,6 +389,8 @@ namespace flight_director.ViewModels
                 OnPropertyChanged(nameof(PlaneXOffset));
             }
         }
+
+        // Screen Y location of simulated plane
         public int PlaneYOffset
         {
             get => Preferences.Get(nameof(PlaneYOffset), 342);
@@ -489,6 +401,7 @@ namespace flight_director.ViewModels
             }
         }
 
+        // Leadin distance
         public int LeadIn
         {
             get => Preferences.Get(nameof(LeadIn), 0);
@@ -501,16 +414,20 @@ namespace flight_director.ViewModels
 
 
         // Some functions
+
+        // Convert radian to degree
         public double Rad2Deg(double rad)
         {
             return rad * 180 / Math.PI;
         }
 
+        // convert degree to radian
         public double Deg2Rad(double deg)
         {
             return deg * Math.PI / 180;
         }
 
+        // Calculate bearing between 2 coordinates
         public double CalcCourse_rad(double start_lat_deg, double start_lon_deg, double end_lat_deg, double end_lon_deg)
         {
             double dL = Deg2Rad(end_lon_deg - start_lon_deg);
@@ -521,17 +438,21 @@ namespace flight_director.ViewModels
 
         }
 
+        // Wrap angle to [0 - 2pi]
         public double wrapTo2pi (double angle_rad)
         {
             return (angle_rad + 2 * PI) % (2 * PI);
         }
 
+        // Translate latitude by distance and bearing
         public double translate_lat_rad (double start_lat_deg, double translate_dist_ft, double translate_dir_rad, double R_E)
         {
             double angular_dist_rad = translate_dist_ft / R_E;
             double start_lat_rad = Deg2Rad(start_lat_deg);
             return Asin( Sin(start_lat_rad) * Cos (angular_dist_rad) + Cos(start_lat_rad) * Sin(angular_dist_rad) * Cos(translate_dir_rad));
         }
+
+        // Translate longitude by distance and bearing
         public double translate_lon_rad(double start_lat_deg, double start_lon_deg, double end_lat_deg, double translate_dist_ft, double translate_dir_rad, double R_E)
         {
             double angular_dist_rad = translate_dist_ft / R_E;
@@ -568,39 +489,44 @@ namespace flight_director.ViewModels
             if (MapScale > 2)
             { MapScale = MapScale - 2; }
             else { MapScale = MapScale; }
-            Ref_Scale = 125 * MapScale / 6076.12;
-            Ref_Scale_Disp = string.Format("{0:N2} NM",Ref_Scale);
+            Ref_Scale_1 = 125 * MapScale / 6076.12;
+            Ref_Scale_1_Disp = string.Format("{0:N2} NM",Ref_Scale_1);
         }
 
         void zoom_out()
         {
             MapScale = MapScale + 2;
-            Ref_Scale = 125 * MapScale /6076.12;
-            Ref_Scale_Disp = string.Format("{0:N2} NM", Ref_Scale);
+            Ref_Scale_1 = 125 * MapScale /6076.12;
+            Ref_Scale_1_Disp = string.Format("{0:N2} NM", Ref_Scale_1);
         }
 
+        // Skip current navigation process (skip flyto or line navigation step)
         void SkipNav()
         {
             AbortCur = true;
         }
 
+        // Go to previous line
         void PrevNav()
         {
             AbortCur = true;
             PrevLine = true;
         }
 
+        // Cancel all line
         void CancleNav()
         {
             AbortCur = true;
             AbortAll = true;
         }
 
+        // Go to setting page
         async Task GotoSettings()
         {
             await Shell.Current.GoToAsync(nameof(Settings));
         }
 
+        // Line navigation routine
         async Task LineNavigate (string LineName)
         {
             const int R_e = 3963 * 5280; //Earth radius in feet
@@ -622,6 +548,7 @@ namespace flight_director.ViewModels
             // Test GPS 
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(1));
             var cur_pos = await Geolocation.GetLocationAsync(request);
+            cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
             if (cur_pos == null)
             {
                 Status_Text = "No GPS";
@@ -657,15 +584,6 @@ namespace flight_director.ViewModels
                 End_Lon_deg = cur_line.StartLon;
             }
 
-            // Convert start coordinates to radian 
-            double Start_Lat_rad = Deg2Rad(Start_Lat_deg);
-            double Start_Lon_rad = Deg2Rad(Start_Lon_deg);
-            double End_Lat_rad = Deg2Rad(End_Lat_deg);
-            double End_Lon_rad = Deg2Rad(End_Lon_deg);
-
-            // Calculate length of line (Is this neccesary)
-            double line_length_mile = 5280 * Location.CalculateDistance(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
-
 
             Leg_GroundCourse_Text = $"Crs: {(int)Rad2Deg(target_groundcourse_rad)}";
             
@@ -694,8 +612,7 @@ namespace flight_director.ViewModels
                 Status_Text = $"Flying to line {cur_line.ID}";
             }
             double dist_rem_ft = 5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, Start_Lat_deg, Start_Lon_deg, DistanceUnits.Miles);
-            
-            DistRem = (int)dist_rem_ft; // need checking
+
             Status_Back_Color = "Red";
             DashColor = 100;
             LeadInColor = 100;
@@ -710,6 +627,7 @@ namespace flight_director.ViewModels
             double angle_to_start_rad;
             double angle_to_end_rad;
             double angle_to_leadin_rad;
+            double deviation_num;
 
             // FlyTo Loop
             while (dist_rem_ft > WPRadius) //Check if beginning of first waypoint is reached
@@ -722,10 +640,14 @@ namespace flight_director.ViewModels
                 // Handle if current line is skipped or aborted
                 if (AbortCur == true)
                 {
-                    AbortCur = false;
+                    if (AbortAll != true)
+                    {
+                        AbortCur = false;
+                    }
                     break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
+                cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
                 if (cur_pos != null && cur_pos.Accuracy < 30)
                 {
                     // Parse current location
@@ -735,8 +657,7 @@ namespace flight_director.ViewModels
                     // Get current altitude
                     if (cur_pos.Altitude != 0)
                     {
-                        CurrentAlt = 3.28084 * (double)cur_pos.Altitude;
-                        VertDeviationNum = CurrentAlt - avg_alt;
+                        CurrentAlt = (int)(3.28084 * (double)cur_pos.Altitude);
                     }
 
                     // Update heading when move sufficiently far. Reduce random jumps due to noisy GPS
@@ -747,7 +668,7 @@ namespace flight_director.ViewModels
                         prevlon_deg = cur_pos.Longitude;
 
                         // Change to point direction
-                        Course = (double)-Rad2Deg(Deg2Rad(Heading));
+                        Course_Bug = (double)-Rad2Deg(Deg2Rad(Heading));
                     }
 
 
@@ -755,8 +676,8 @@ namespace flight_director.ViewModels
                     // Calculate horizontal deviation
                     dist_rem_ft = (int)(5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, Rad2Deg(offset_start_lat_rad), Rad2Deg(offset_start_lat_rad), DistanceUnits.Miles));
                     bearing_target_to_cur_rad = CalcCourse_rad(Rad2Deg(offset_end_lat_rad), Rad2Deg(offset_end_lon_rad), cur_pos.Latitude, cur_pos.Longitude);
-                    DeviationNum = dist_rem_ft * Sin(bearing_target_to_cur_rad - wrapTo2pi(target_groundcourse_rad + PI));
-                    Deviation = DeviationNum * (HorBarUnit / FeetperBar);
+                    deviation_num = dist_rem_ft * Sin(bearing_target_to_cur_rad - wrapTo2pi(target_groundcourse_rad + PI));
+                    Deviation = deviation_num * (HorBarUnit / FeetperBar);
                     if (Abs(Deviation) > HorBarUnit * 6.1)
                     {
                         Deviation = Sign(Deviation) * HorBarUnit * 6.1;
@@ -780,12 +701,11 @@ namespace flight_director.ViewModels
                     Y_Leadin = -dist_to_leadin_unit * Cos(angle_to_leadin_rad) + PlaneYOffset;
 
                     // Update numerical readouts and graphical elements
-                    Acc = (int)(cur_pos.Accuracy * 3.28084);
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    DeviationDisp = $"Dev: {Abs((int)DeviationNum)} ft";
-                    DistRemDisp = $"Dst Rem: {DistRem} ft";
-                    AccDisp = $"Acc: {Acc} ft";
+                    DeviationDisp = $"Dev: {Abs((int)deviation_num)} ft";
+                    DistRemDisp = $"Dst Rem: {dist_rem_ft} ft";
+                    AccDisp = $"Acc: {(int)(cur_pos.Accuracy * 3.28084)} ft";
                     
                 }
                 await Task.Delay(10);
@@ -796,16 +716,16 @@ namespace flight_director.ViewModels
             // Set the status text according to flight direction
             if (IsReversed == true)
             {
-                Status_Text = $"Flying line {LineID}*";
+                Status_Text = $"Flying line {cur_line.ID}*";
             }
             else
             {
-                Status_Text = $"Flying line {LineID}";
+                Status_Text = $"Flying line {cur_line.ID}";
             }
 
             //Recalculate remaining distance
-            dist_rem_ft = 5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, cur_line.EndLat, cur_line.EndLon, DistanceUnits.Miles);
-            DistRem = (int)dist_rem_ft;
+            dist_rem_ft = 5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, Rad2Deg(offset_end_lat_rad), Rad2Deg(offset_end_lon_rad), DistanceUnits.Miles);
+
             // Update status to Navigate mode (follow the refeence trajectory)
             Status_Back_Color = "Green";
             DashColor = 0;
@@ -823,10 +743,9 @@ namespace flight_director.ViewModels
                     break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
+                cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
                 if (cur_pos != null && cur_pos.Accuracy < 30)
                 {
-                    CurrentLat = cur_pos.Latitude;
-                    CurrentLon = cur_pos.Longitude;
 
                     // Heading update
                     if ((int)(5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, prevlat_deg, prevlon_deg, DistanceUnits.Miles)) > HeadingThreshold)
@@ -834,22 +753,21 @@ namespace flight_director.ViewModels
                         Heading = (double)Rad2Deg(CalcCourse_rad(prevlat_deg, prevlon_deg, cur_pos.Latitude, cur_pos.Longitude));
                         prevlat_deg = cur_pos.Latitude;
                         prevlon_deg = cur_pos.Longitude;
-                        Course = (double)-Rad2Deg(Deg2Rad(Heading)); // change to point dir
+                        Course_Bug = (double)-Rad2Deg(Deg2Rad(Heading)); // change to point dir
                     }
 
                     // Update dist_rem and altitude
-                    dist_rem_ft = (int)(5280 * Location.CalculateDistance(CurrentLat, CurrentLon, TargetLat, TargetLon, DistanceUnits.Miles));
+                    dist_rem_ft = (int)(5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, Rad2Deg(offset_end_lat_rad), Rad2Deg(offset_end_lon_rad), DistanceUnits.Miles));
                     if (cur_pos.Altitude != 0)
                     {
-                        CurrentAlt = 3.28084 * (double)cur_pos.Altitude;
-                        VertDeviationNum = CurrentAlt - avg_alt;
+                        CurrentAlt = (int)(3.28084 * (double)cur_pos.Altitude);
                     }
 
-                    bearing_target_to_cur_rad = CalcCourse_rad(cur_line.EndLat, cur_line.EndLon, cur_pos.Latitude, cur_pos.Longitude);
+                    bearing_target_to_cur_rad = CalcCourse_rad(Rad2Deg(offset_end_lat_rad), Rad2Deg(offset_end_lon_rad), cur_pos.Latitude, cur_pos.Longitude);
 
                     // Calculate devieation
-                    DeviationNum = dist_rem_ft * Sin(bearing_target_to_cur_rad - wrapTo2pi(target_groundcourse_rad + PI));
-                    Deviation = DeviationNum * (HorBarUnit / FeetperBar);
+                    deviation_num = dist_rem_ft * Sin(bearing_target_to_cur_rad - wrapTo2pi(target_groundcourse_rad + PI));
+                    Deviation = deviation_num * (HorBarUnit / FeetperBarPrecise);
                     // Saturate devviation bug travel
                     if (Abs(Deviation) > HorBarUnit * 6.1)
                     {
@@ -869,19 +787,18 @@ namespace flight_director.ViewModels
                     Y_End = -dist_to_end_unit * Cos(angle_to_end_rad) + PlaneYOffset;
 
                     // Update numerical readouts and graphical elements
-                    Acc = (int)(cur_pos.Accuracy * 3.28084);
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    DeviationDisp = $"Dev: {Abs((int)DeviationNum)} ft";
-                    DistRemDisp = $"Dst Rem: {DistRem} ft";
-                    AccDisp = $"Acc: {Acc} ft";
+                    DeviationDisp = $"Dev: {Abs((int)deviation_num)} ft";
+                    DistRemDisp = $"Dst Rem: {dist_rem_ft} ft";
+                    AccDisp = $"Acc: {(int)(cur_pos.Accuracy * 3.28084)} ft";
                 }
                 await Task.Delay(10);
 
             }
             //Finish navigating
             EnableFlyTo = true;
-            if (Is_Sequenced == true)
+            if (Is_Sequence == true)
             {
                 EnableFlyTo = false;
             }
@@ -891,17 +808,14 @@ namespace flight_director.ViewModels
             HeadingDisp = 0;
             DeviationDisp = "Dev: ";
             Deviation = 0;
-            VertDeviationDisp = 0;
-            VertDeviation = 0;
             AccDisp = "Acc:";
             DistRemDisp = "Dst Rem:";
             Leg_GroundCourse_Text = "Crs: ";
-            Course = 0;
+            Course_Bug = 0;
             X_Start = 0;
             Y_Start = 0;
             X_End = 0;
             Y_End = 0;
-            CourseDes = 0;
         }
 
         async Task Navigate()
@@ -915,9 +829,10 @@ namespace flight_director.ViewModels
             Status_Text = "Stand By";
 
 
+
             //Parse selected line info
             var line_seq = LineSeq.Split(',');
-            Is_Sequenced = line_seq.Length > 1;
+            Is_Sequence = line_seq.Length > 1;
             for (int i = 0; i < line_seq.Length; i++)
             {
                 // Run navigation routine
@@ -928,7 +843,8 @@ namespace flight_director.ViewModels
                 if (AbortAll == true)
                 {
                     AbortAll = false;
-                    return; }
+                    break; 
+                }
 
                 // Handle previous line command
                 if (PrevLine == true)
@@ -948,6 +864,7 @@ namespace flight_director.ViewModels
                 }
 
             }
+            EnableFlyTo = true;
 
         }
 
