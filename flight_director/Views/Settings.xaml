@@ -77,43 +77,13 @@
                 Text="Horizontal Bar Unit"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="3"
+                Grid.Row="8"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding HorBarUnit, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="3"
-                Keyboard="Numeric"
-                BackgroundColor="White"
-                />
-
-            <Label
-                Text="Vertical deviation bar distance (ft)"
-                TextColor="White"
-                FontSize="Medium"
-                Grid.Row="4"
-                VerticalTextAlignment="Center"
-                />
-            <Entry
-                Text="{Binding FeetperVertBar, Mode=TwoWay}"
-                Grid.Column="1"
-                Grid.Row="4"
-                Keyboard="Numeric"
-                BackgroundColor="White"
-                />
-
-            <Label
-                Text="Vertical Bar Unit"
-                TextColor="White"
-                FontSize="Medium"
-                Grid.Row="5"
-                VerticalTextAlignment="Center"
-                />
-            <Entry
-                Text="{Binding VerBarUnit, Mode=TwoWay}"
-                Grid.Column="1"
-                Grid.Row="5"
+                Grid.Row="8"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -122,13 +92,13 @@
                 Text="Course calculation threshold (ft)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="6"
+                Grid.Row="3"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding HeadingThreshold, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="6"
+                Grid.Row="3"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -137,28 +107,43 @@
                 Text="Antenna offset angle (degree) - clockwise from aft is positive"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="7"
+                Grid.Row="4"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding AntennaAngle, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="7"
+                Grid.Row="4"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
 
             <Label
+                Text="Lead in distance (ft)"
+                TextColor="White"
+                FontSize="Medium"
+                Grid.Row="5"
+                VerticalTextAlignment="Center"
+                />
+            <Entry
+                Text="{Binding LeadIn, Mode=TwoWay}"
+                Grid.Column="1"
+                Grid.Row="5"
+                Keyboard="Numeric"
+                BackgroundColor="White"
+                />
+            
+            <Label
                 Text="Simulated Plane x-offset (unit)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="8"
+                Grid.Row="6"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding PlaneXOffset, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="8"
+                Grid.Row="6"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
@@ -167,13 +152,13 @@
                 Text="Simulated Plane y-offset (unit)"
                 TextColor="White"
                 FontSize="Medium"
-                Grid.Row="9"
+                Grid.Row="7"
                 VerticalTextAlignment="Center"
                 />
             <Entry
                 Text="{Binding PlaneYOffset, Mode=TwoWay}"
                 Grid.Column="1"
-                Grid.Row="9"
+                Grid.Row="7"
                 Keyboard="Numeric"
                 BackgroundColor="White"
                 />
