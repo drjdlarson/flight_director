@@ -103,6 +103,14 @@ namespace flight_director.ViewModels
             set => SetProperty(ref status_back_color, value);
         }
 
+        // Status button background color
+        private string flyto_back_color = "DeepSkyBlue";
+        public string Flyto_Back_Color
+        {
+            get => flyto_back_color;
+            set => SetProperty(ref flyto_back_color, value);
+        }
+
         // Line sequence input text box
         private string lineseq = "";
         public string LineSeq
@@ -528,40 +536,44 @@ namespace flight_director.ViewModels
         async Task LineNavigate (string LineName)
         {
             const int R_e = 3963 * 5280; //Earth radius in feet
-
             // Get Line Number and check reverse command
             int LineNo = 0;
-            if (LineName.EndsWith("*"))
+
+            string temp;
+            temp = LineName.Remove(LineName.Length - 1);
+            if (!int.TryParse(LineName, out LineNo) && !int.TryParse(temp, out LineNo))
             {
-                IsReversed = true;
-                 LineNo = Int16.Parse(LineName.TrimEnd('*'));
+                EnableFlyTo = true;
+                Flyto_Back_Color = "DeepSkyBlue";
+                Status_Text = $"Invalid Line";
+                StatusColor = "Red";
+                return;
             }
-            else
-            { 
-               LineNo = Int16.Parse(LineName);
-               IsReversed = false;
-
-            } 
-
+            
+            IsReversed = LineName.EndsWith("*");
+            
             // Test GPS 
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(1));
             var cur_pos = await Geolocation.GetLocationAsync(request);
-            cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
+
             if (cur_pos == null)
             {
                 Status_Text = "No GPS";
                 StatusColor = "Red";
                 EnableFlyTo = true;
+                Flyto_Back_Color = "DeepSkyBlue";
                 return;
             }
 
             // Get current line params
+            
             var cur_line = await FlightLineService.GetLine(LineNo);
             if (cur_line == null) //Check if the entered line is valid (id < total number of line in database)
             {
                 Status_Text = "Invalid Line";
                 StatusColor = "Red";
                 EnableFlyTo = true;
+                Flyto_Back_Color = "DeepSkyBlue";
                 return;
             }
             
@@ -628,11 +640,11 @@ namespace flight_director.ViewModels
             double angle_to_leadin_rad;
             double deviation_num;
             double dist_to_start_ft = dist_rem_ft;
-            double speed_fps = (double)cur_pos.Speed * 3.28084;
+            double speed_fps;
             double eta;
 
             // FlyTo Loop
-            while (dist_to_start_ft > WPRadius) //Check if beginning of first waypoint is reached
+            while (dist_to_start_ft > WPRadius && dist_to_start_ft < 100000000) //Check if beginning of first waypoint is reached
             {
                 // Turn of dashed line if reached leading point
                 if ((int)(5280 * Location.CalculateDistance(cur_pos.Latitude, cur_pos.Longitude, leadin_lat_deg, leadin_lon_deg, DistanceUnits.Miles)) < WPRadius)
@@ -649,8 +661,7 @@ namespace flight_director.ViewModels
                     break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
-                cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
-                if (cur_pos != null && cur_pos.Accuracy < 30)
+                if (cur_pos != null)
                 {
                     // Parse current location
                     CurrentLat = cur_pos.Latitude;
@@ -717,7 +728,7 @@ namespace flight_director.ViewModels
 
 
                 }
-                await Task.Delay(10);
+                await Task.Delay(15);
 
             }
 
@@ -752,8 +763,7 @@ namespace flight_director.ViewModels
                     break;
                 }
                 cur_pos = await Geolocation.GetLocationAsync(request);
-                cur_pos.AltitudeReferenceSystem = AltitudeReferenceSystem.Geoid;
-                if (cur_pos != null && cur_pos.Accuracy < 30)
+                if (cur_pos != null)
                 {
 
                     // Heading update
@@ -812,7 +822,7 @@ namespace flight_director.ViewModels
                     }
                     
                 }
-                await Task.Delay(10);
+                await Task.Delay(15);
 
             }
             //Finish navigating
@@ -821,6 +831,7 @@ namespace flight_director.ViewModels
             {
                 EnableFlyTo = false;
             }
+            Flyto_Back_Color = "DeepSkyBlue";
             Status_Back_Color = "Gray";
             Status_Text = "Stand By";
             HeadingComp = 0;
@@ -849,10 +860,28 @@ namespace flight_director.ViewModels
 
 
             //Parse selected line info
+            await Task.Delay(1000);
+            if (LineSeq == null || LineSeq.Length < 1)
+            {
+                EnableFlyTo = true;
+                Flyto_Back_Color = "DeepSkyBlue";
+                return;
+            }
+            
+
             var line_seq = LineSeq.Split(',');
+            
             Is_Sequence = line_seq.Length > 1;
             for (int i = 0; i < line_seq.Length; i++)
             {
+                if (line_seq[i].Length < 1)
+                {
+                    EnableFlyTo = true;
+                    Flyto_Back_Color = "DeepSkyBlue";
+                    StatusColor = "Red";
+                    Status_Text = "Invalid Line";
+                    return;
+                }
                 // Run navigation routine
                 await LineNavigate(line_seq[i]);
                 IsReversed = false;
@@ -883,7 +912,7 @@ namespace flight_director.ViewModels
 
             }
             EnableFlyTo = true;
-
+            Flyto_Back_Color = "DeepSkyBlue";
         }
 
 

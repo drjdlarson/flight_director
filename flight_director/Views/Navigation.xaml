@@ -56,8 +56,8 @@
                    Grid.ColumnSpan="4" 
                     Grid.Row="1"
                     Rotation="{Binding HeadingComp}"
-                    Scale="1.41"
-                    TranslationY="130"
+                    Scale="1.5"
+                    TranslationY="205"
                      
                 />
 
@@ -75,8 +75,8 @@
                 Grid.ColumnSpan="4"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                X1="{Binding X_Start}"
-                Y1="{Binding Y_Start}"
+                X1="{Binding X_Leadin}"
+                Y1="{Binding Y_Leadin}"
                 X2="{Binding PlaneXOffset}"
                 Y2="{Binding PlaneYOffset}"
                 Stroke="#FFFFFF"
@@ -138,8 +138,8 @@
                    Source="ref_scale.png"
                    Grid.ColumnSpan="4" 
                     Grid.Row="1"
-                    Scale="1.41"
-                    TranslationY="130"
+                    Scale="1.5"
+                    TranslationY="205"
                 />
 
             <Image 
@@ -147,7 +147,7 @@
                    Grid.Row="1"
                    Grid.ColumnSpan="4"
                    Scale="0.95"
-                   TranslationY="130"
+                   TranslationY="190"
                  />
 
             <Rectangle
@@ -210,7 +210,7 @@
                  />
 
             <Button 
-                    BackgroundColor="DeepSkyBlue"
+                    BackgroundColor="{Binding Flyto_Back_Color}"
                     Command="{Binding Flyto}"
                     IsEnabled="{Binding EnableFlyTo}"
                     Padding="1"
