@@ -566,7 +566,6 @@ namespace flight_director.ViewModels
             }
 
             // Get current line params
-            
             var cur_line = await FlightLineService.GetLine(LineNo);
             if (cur_line == null) //Check if the entered line is valid (id < total number of line in database)
             {
@@ -576,7 +575,6 @@ namespace flight_director.ViewModels
                 Flyto_Back_Color = "DeepSkyBlue";
                 return;
             }
-            
             // Calculate leg ground course depending on direction
             double target_groundcourse_rad = CalcCourse_rad(cur_line.StartLat, cur_line.StartLon, cur_line.EndLat, cur_line.EndLon);
             double Start_Lat_deg = cur_line.StartLat;
@@ -642,6 +640,7 @@ namespace flight_director.ViewModels
             double dist_to_start_ft = dist_rem_ft;
             double speed_fps;
             double eta;
+            ulong i = 1;
 
             // FlyTo Loop
             while (dist_to_start_ft > WPRadius && dist_to_start_ft < 100000000) //Check if beginning of first waypoint is reached
@@ -660,6 +659,7 @@ namespace flight_director.ViewModels
                     }
                     break;
                 }
+                
                 cur_pos = await Geolocation.GetLocationAsync(request);
                 if (cur_pos != null)
                 {
@@ -671,6 +671,7 @@ namespace flight_director.ViewModels
                     if (cur_pos.Altitude != 0)
                     {
                         CurrentAlt = (int)(3.28084 * (double)cur_pos.Altitude);
+                        AltDisp = $"MSL_Alt: {(int)CurrentAlt} ft";
                     }
 
                     // Update heading when move sufficiently far. Reduce random jumps due to noisy GPS
@@ -708,14 +709,13 @@ namespace flight_director.ViewModels
 
                     X_Leadin = -dist_to_leadin_unit * Sin(angle_to_leadin_rad) + PlaneXOffset; ;
                     Y_Leadin = -dist_to_leadin_unit * Cos(angle_to_leadin_rad) + PlaneYOffset;
-
+                    
                     // Update numerical readouts and graphical elements
                     Course_Bug = angle_to_start_rad;
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    AltDisp = $"MSL_Alt: {(int)CurrentAlt} ft";
-
-                    speed_fps = (double)cur_pos.Speed * 3.28084;
+                    
+                    /*speed_fps = (double)cur_pos.Speed * 3.28084;
                     eta = dist_to_start_ft / speed_fps;
                     if (eta > 60)
                     {
@@ -724,8 +724,7 @@ namespace flight_director.ViewModels
                     else
                     {
                         ETADisp = $"ETA: {(int)(eta)} sec";
-                    }
-
+                    }*/
 
                 }
                 await Task.Delay(15);
@@ -779,6 +778,7 @@ namespace flight_director.ViewModels
                     if (cur_pos.Altitude != 0)
                     {
                         CurrentAlt = (int)(3.28084 * (double)cur_pos.Altitude);
+                        AltDisp = $"MSL_Alt: {(int)CurrentAlt} ft";
                     }
 
                     bearing_target_to_cur_rad = CalcCourse_rad(offset_end_lat_deg, offset_end_lon_deg, cur_pos.Latitude, cur_pos.Longitude);
@@ -808,9 +808,9 @@ namespace flight_director.ViewModels
                     Course_Bug = angle_to_end_rad;
                     HeadingComp = -Heading;
                     HeadingDisp = (int)Heading;
-                    AltDisp = $"MSL_Alt: {(int)CurrentAlt} ft";
+                    
 
-                    speed_fps = (double)cur_pos.Speed * 3.28084;
+                    /*speed_fps = (double)cur_pos.Speed * 3.28084;
                     eta = dist_to_start_ft / speed_fps;
                     if (eta > 60)
                     {
@@ -819,7 +819,7 @@ namespace flight_director.ViewModels
                     else
                     {
                         ETADisp = $"ETA: {(int)(eta)} sec";
-                    }
+                    }*/
                     
                 }
                 await Task.Delay(15);
